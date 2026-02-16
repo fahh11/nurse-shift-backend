@@ -1,0 +1,206 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["nurse_shift_db"]
+}
+
+// ---------- models ----------
+model user {
+  user_id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  first_name      String            @db.VarChar(100)
+  last_name       String            @db.VarChar(100)
+  nickname        String?           @db.VarChar(100)
+  birth_date      DateTime?         @db.Date
+  personal_email  String            @unique @db.VarChar(255)
+  google_email_id String            @unique @db.VarChar(255)
+  line_user_id    String            @unique @db.VarChar(255)
+  mobile_phone    String            @db.VarChar(25)
+  hospital_id     String            @db.Uuid
+  created_at      DateTime          @default(now()) @db.Timestamp(6)
+  updated_at      DateTime          @updatedAt @db.Timestamp(6)
+
+  // Relations
+  wardCreatedBy         ward[]                @relation("wardCreatedBy")
+  wardUpdatedBy         ward[]                @relation("wardUpdatedBy")
+  wardMember            ward_member[]
+  shiftAssignments      shift_assignment[]
+  shiftSwapRequesters   shift_swap_request[]  @relation("shiftSwapRequesters")
+  shiftSwapApprovers    shift_swap_request[]  @relation("shiftSwapApprovers")
+
+  hospital        hospital          @relation(fields: [hospital_id], references: [hospital_id])
+
+  @@schema("nurse_shift_db")
+}
+
+model hospital {
+  hospital_id     String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String            @db.VarChar(255)
+  address         String            @db.VarChar(255)
+  created_at      DateTime          @default(now()) @db.Timestamp(6)
+  updated_at      DateTime          @updatedAt @db.Timestamp(6)
+
+  // Relations
+  users           user[]
+  wards           ward[]
+
+  @@schema("nurse_shift_db")
+}
+
+model ward {
+  ward_id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ward_code           String            @db.VarChar(255)
+  ward_name           String            @db.VarChar(255)
+  hospital_id         String            @db.Uuid
+  join_code           String            @unique @db.VarChar(255)
+  join_code_status    Boolean           @default(true)
+  status              WardStatus
+  created_by          String            @db.Uuid
+  updated_by          String            @db.Uuid
+  created_at          DateTime          @default(now()) @db.Timestamp(6)
+  updated_at          DateTime          @updatedAt @db.Timestamp(6)
+
+  // Relations
+  wardMembers         ward_member[]
+  shiftTemplates      shift_template[]
+
+  createdBy           user              @relation("wardCreatedBy", fields: [created_by], references: [user_id])
+  updatedBy           user              @relation("wardUpdatedBy", fields: [updated_by], references: [user_id])
+  hospital            hospital          @relation(fields: [hospital_id], references: [hospital_id])
+
+  @@schema("nurse_shift_db")
+}
+
+model ward_member {
+  ward_member_id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                    String            @db.Uuid
+  ward_id                    String            @db.Uuid
+  role                       WardMemberRole
+  created_at                 DateTime          @default(now()) @db.Timestamp(6)
+  updated_at                 DateTime          @updatedAt @db.Timestamp(6)
+
+  // Relations
+  user                      user              @relation(fields: [user_id], references: [user_id])
+  ward                      ward              @relation(fields: [ward_id], references: [ward_id])
+
+  @@schema("nurse_shift_db")
+}
+
+model shift_template {
+  shift_template_id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ward_id                    String            @db.Uuid
+  type                       ShiftTemplateType
+  start_time                 DateTime          @db.Time
+  end_time                   DateTime          @db.Time
+  created_at                 DateTime          @default(now()) @db.Timestamp(6)
+  updated_at                 DateTime          @updatedAt @db.Timestamp(6)
+
+  // Relations
+  shiftRequirements        shift_requirement[]
+  shiftAssignments         shift_assignment[]
+
+  ward                      ward              @relation(fields: [ward_id], references: [ward_id])
+
+  @@schema("nurse_shift_db")
+}
+
+model shift_requirement {
+  shift_requirement_id        String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shift_template_id           String            @db.Uuid
+  required_people             Int               @db.Integer
+  effective_from              DateTime          @db.Date
+  effective_to                DateTime?         @db.Date
+  created_at                  DateTime          @default(now()) @db.Timestamp(6)
+  updated_at                  DateTime          @updatedAt @db.Timestamp(6)
+
+  @@unique([shift_template_id, effective_from])
+
+  // Relations
+  shiftTemplate              shift_template    @relation(fields: [shift_template_id], references: [shift_template_id])
+
+  @@schema("nurse_shift_db")
+}
+
+model shift_assignment {
+  shift_assignment_id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shift_template_id           String            @db.Uuid
+  user_id                     String            @db.Uuid
+  date                        DateTime          @db.Date
+  assignment_type             ShiftAssignmentType
+  created_at                  DateTime          @default(now()) @db.Timestamp(6)
+  updated_at                  DateTime          @updatedAt @db.Timestamp(6)
+
+  @@unique([user_id, date])
+
+  // Relations
+  shiftAssignmentOfRequesters   shift_swap_request[]  @relation("shiftAssignOfRequesters")
+  shiftAssignmentOfApprovers    shift_swap_request[]  @relation("shiftAssignOfApprovers")
+
+  shiftTemplate                 shift_template        @relation(fields: [shift_template_id], references: [shift_template_id])
+  user                          user                  @relation(fields: [user_id], references: [user_id])
+
+  @@schema("nurse_shift_db")
+}
+
+model shift_swap_request {
+  shift_swap_request_id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  requester_user_id             String            @db.Uuid
+  approver_user_id              String            @db.Uuid
+  requester_assignment_id       String            @db.Uuid
+  approver_assignment_id        String            @db.Uuid
+  status                        ShiftSwapRequestStatus
+  note                          String            @db.VarChar(255)
+  requested_at                  DateTime          @default(now()) @db.Timestamp(6)
+  responded_at                  DateTime?         @updatedAt @db.Timestamp(6)
+
+  // Relations
+  requester                   user              @relation("shiftSwapRequesters", fields: [requester_user_id], references: [user_id])
+  approver                    user              @relation("shiftSwapApprovers", fields: [approver_user_id], references: [user_id])
+  requesterAssignment         shift_assignment  @relation("shiftAssignOfRequesters", fields: [requester_assignment_id], references: [shift_assignment_id])
+  approverAssignment          shift_assignment  @relation("shiftAssignOfApprovers", fields: [approver_assignment_id], references: [shift_assignment_id])
+  
+  @@schema("nurse_shift_db")
+}
+
+
+// ---------- enums ----------
+enum WardStatus {
+  active
+  inactive
+
+  @@schema("nurse_shift_db")
+}
+
+enum WardMemberRole {
+  head_nurse
+  nurse
+
+  @@schema("nurse_shift_db")
+}
+
+enum ShiftTemplateType {
+  morning
+  afternoon
+  night
+
+  @@schema("nurse_shift_db")
+}
+
+enum ShiftAssignmentType {
+  shift
+  off
+  leave
+
+  @@schema("nurse_shift_db")
+}
+
+enum ShiftSwapRequestStatus {
+  pending
+  approved
+  rejected
+
+  @@schema("nurse_shift_db")
+}

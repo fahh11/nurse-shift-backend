@@ -1,0 +1,30 @@
+# dependencies
+node_modules
+pnpm-lock.yaml
+
+# environment
+.env
+
+# build output
+dist
+build
+
+# prisma generated client
+src/generated/prisma
+
+# logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# coverage
+coverage
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
