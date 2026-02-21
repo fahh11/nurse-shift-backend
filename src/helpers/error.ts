@@ -1,17 +1,10 @@
 export const ErrorDescription = {
-    // Schema Validation Errors
-    INVALID_INPUT: {
-        code: 'INVALID_INPUT',
-        message: 'The input data is invalid.',
-    },
-
     // Auth Errors
     INVALID_GOOGLE_TOKEN: {
         code: 'INVALID_GOOGLE_TOKEN',
         message: 'The provided Google token is invalid.',
     },
     
-
     // User Errors
     USER_ALREADY_EXISTS: {
         code: 'USER_ALREADY_EXISTS',
@@ -26,6 +19,12 @@ export const ErrorDescription = {
         message: 'User profile information is incomplete.',
     },
 
+    // Ward Errors
+    WARD_ACCESS_DENIED: {
+        code: 'WARD_ACCESS_DENIED',
+        message: 'You do not have permission to access this ward',
+    },
+
     // Not Found Errors
     HOSPITAL_NOT_FOUND: {
         code: 'HOSPITAL_NOT_FOUND',
@@ -34,6 +33,22 @@ export const ErrorDescription = {
     USER_NOT_FOUND: {
         code: 'USER_NOT_FOUND',
         message: 'User not found.',
+    },
+    WARD_NOT_FOUND: {
+        code: 'WARD_NOT_FOUND',
+        message: 'Ward not found.',
+    },
+
+    // Server Errors
+    INTERNAL_SERVER_ERROR: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Internal server error'
+    },
+
+    // Schema Validation Errors
+    INVALID_INPUT: {
+        code: 'INVALID_INPUT',
+        message: 'The input data is invalid.',
     },
   
 } as const

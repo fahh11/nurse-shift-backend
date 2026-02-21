@@ -7,8 +7,9 @@ export default async function userRoutes(app: FastifyInstance) {
     app.patch<{Body: UpdateUserForCompleteProfileBody}>(
         '/updateForCompleteProfile',
         {
+            attachValidation: true,
             schema: updateUserForCompleteProfileSchema,
-            // preHandler: [app.authenticate, app.requireCompletedProfile] 
+            preHandler: [app.authenticate] 
         },
         UserController.updateForCompleteProfile
     );
@@ -16,8 +17,9 @@ export default async function userRoutes(app: FastifyInstance) {
     app.patch<{Body: UpdateUserBody}>(
         '/update',
         {
+            attachValidation: true,
             schema: updateUserSchema,
-            // preHandler: [app.authenticate, app.requireCompletedProfile] 
+            preHandler: [app.authenticate, app.requireCompletedProfile] 
         },
         UserController.update
     );
