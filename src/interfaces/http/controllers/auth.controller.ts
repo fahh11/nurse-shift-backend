@@ -11,7 +11,7 @@ export const AuthController = {
     const input = request.body
     const jwtService = new JwtServiceImpl(request.server)
 
-    const result = await authWithGoogle(input.tokenId, { userRepo, jwtService })
+    const result = await authWithGoogle(input, { userRepo, jwtService })
     return reply.send(result)
   },
 

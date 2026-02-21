@@ -1,38 +1,5 @@
 const tags = ['User'];
 
-export const createUserSchema = {
-    description: 'Create a new user record',
-    tags,
-    body: {
-        type: 'object',
-        required: ['personalEmail', 'googleEmailId'],
-        properties: {
-            personalEmail: { type: 'string' },
-            googleEmailId: { type: 'string' },
-        },
-    },
-    response: {
-        200: {
-            type: 'object',
-            properties: {
-                userId: { type: 'string' },
-                firstName: { type: ['string', 'null'], nullable: true },
-                lastName: { type: ['string', 'null'], nullable: true },
-                nickname: { type: ['string', 'null'], nullable: true },
-                birthDate: { type: ['string', 'null'], format: 'date', nullable: true },
-                personalEmail: { type: 'string' },
-                googleEmailId: { type: 'string' },
-                lineUserId: { type: ['string', 'null'], nullable: true },
-                mobilePhone: { type: ['string', 'null'], nullable: true },
-                hospitalId: { type: ['string', 'null'], nullable: true },
-                profileCompleted: { type: 'boolean'  , default: false },
-                createdAt: { type: 'string', format: 'date-time' },
-                updatedAt: { type: 'string', format: 'date-time' },
-            },
-        },
-    },
-};
-
 export const updateUserForCompleteProfileSchema = {
     description: 'Update user profile information to complete the profile',
     tags,

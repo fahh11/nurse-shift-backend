@@ -5,7 +5,7 @@ config();
 
 export const env = {
     nodeEnv: envVar.get('NODE_ENV').default('development').asString(),
-    port: envVar.get('PORT').default('3000').asPortNumber(),
+    port: envVar.get('PORT').default('4000').asPortNumber(),
     logger: envVar.get('LOGGER').default('false').asBoolStrict(),
     host: envVar.get('HOST').default('0.0.0.0').asString(),
 

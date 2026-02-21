@@ -1,19 +1,21 @@
 import { OAuth2Client } from 'google-auth-library'
-import { CustomError, ErrorDescription } from '@service/helpers/error'
-import { StatusCode } from '@service/enums/statusCode'
 import { User } from '@service/domain/entities/user'
 import { UserRepository } from '@service/domain/repositories/user.repository'
 import { JwtService } from '@service/domain/ports/jwtService'
+import { CreateGoogleAuthBody } from '@service/types/auth.type'
+import { CreateGoogleAuthOutputDto } from '@service/interfaces/dto/auth/auth.output'
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 export const authWithGoogle = async (
-  idToken: string,
+  input: CreateGoogleAuthBody,
   repos: { 
     userRepo: UserRepository,
     jwtService: JwtService
  }
-) => {
+): Promise<CreateGoogleAuthOutputDto> => {
+    const idToken = input.tokenId
+
     const ticket = await client.verifyIdToken({
         idToken,
         audience: process.env.GOOGLE_CLIENT_ID,
@@ -49,8 +51,9 @@ export const authWithGoogle = async (
 
 
     return {
-        accessToken,
-        user,
+        accessToken: accessToken,
+        userId: user.userId,
+        personalEmail: user.personalEmail,
         profileCompleted: user.profileCompleted
     }
 

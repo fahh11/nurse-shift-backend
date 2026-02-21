@@ -9,7 +9,9 @@ export default async function hospitalRoutes(app: FastifyInstance) {
     app.post<{Body: CreateHospitalBody}>(
         '/create',
         {
+            attachValidation: true,
             schema: createHospitalSchema,
+            preHandler: [app.authenticate, app.requireCompletedProfile] 
         },
         HospitalController.create
     );
@@ -17,7 +19,9 @@ export default async function hospitalRoutes(app: FastifyInstance) {
     app.patch<{Body: UpdateHospitalBody}>(
         '/update',
         {
+            attachValidation: true,
             schema: updateHospitalSchema,
+            preHandler: [app.authenticate, app.requireCompletedProfile] 
         },
         HospitalController.update
     );
