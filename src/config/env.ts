@@ -16,6 +16,7 @@ export const env = {
     google: {
         clientId: envVar.get("GOOGLE_CLIENT_ID").required().asString(),
         clientSecret: envVar.get("GOOGLE_CLIENT_SECRET").required().asString(),
+        redirectUrl: envVar.get("GOOGLE_REDIRECT_URI").required().asString(),
     },
 
     jwt: {

@@ -4,23 +4,20 @@ import { UserRepository } from '@service/domain/repositories/user.repository'
 import { JwtService } from '@service/domain/ports/jwtService'
 import { CreateGoogleAuthBody } from '@service/types/auth.type'
 import { CreateGoogleAuthOutputDto } from '@service/interfaces/dto/auth/auth.output'
-
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+import { googleOAuthClient } from '@service/infrastructure/http/googleOauth'
 
 export const authWithGoogle = async (
-  input: CreateGoogleAuthBody,
+  idToken: string,
   repos: { 
     userRepo: UserRepository,
     jwtService: JwtService
  }
 ): Promise<CreateGoogleAuthOutputDto> => {
-    const idToken = input.tokenId
-
-    const ticket = await client.verifyIdToken({
+    const ticket = await googleOAuthClient.verifyIdToken({
         idToken,
         audience: process.env.GOOGLE_CLIENT_ID,
     })
-
+    
     const payload = ticket.getPayload()
     if (!payload?.email) {
         throw new Error('Invalid Google token')

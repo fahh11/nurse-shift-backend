@@ -1,3 +1,3 @@
 export interface CreateGoogleAuthInputDto {
-    tokenId: string
+    code: string
 }

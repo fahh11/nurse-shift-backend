@@ -3,11 +3,11 @@ const tags = ['Auth'];
 export const googleCreateUserSchema = {
     description: 'Create a new user record from google',
     tags,
-    body: {
+    querystring: {
         type: 'object',
-        required: ['tokenId'],
+        required: ['code'],
         properties: {
-            tokenId: { type: 'string' },
+            code: { type: 'string' },
         },
     },
     response: {
