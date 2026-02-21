@@ -4,7 +4,7 @@ import { CreateGoogleAuthBody } from '@service/types/auth.type';
 import { AuthController } from '@service/interfaces/http/controllers/auth.controller';
 
 export default async function authRoutes(app: FastifyInstance) {
-    app.post<{Body: CreateGoogleAuthBody}>(
+    app.get(
         '/google',
         { 
             attachValidation: true,

@@ -1,5 +1,5 @@
 export interface CreateGoogleAuthBody {
-    tokenId: string
+    code: string
 }
 
 export interface JwtPayload {

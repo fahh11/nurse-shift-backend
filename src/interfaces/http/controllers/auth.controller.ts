@@ -3,16 +3,49 @@ import { CreateGoogleAuthBody } from '@service/types/auth.type'
 import { authWithGoogle } from '@service/use-cases/auth/authWithGoogle'
 import { PrismaUserRepository } from '@service/infrastructure/persistence/prisma/repositories/user.repository.impl'
 import { JwtServiceImpl } from '@service/infrastructure/http/jwtServiceImpl'
+import { googleOAuthClient } from '@service/infrastructure/http/googleOauth'
 
 const userRepo = new PrismaUserRepository()
 
 export const AuthController = {
-  googleLogin: async (request: FastifyRequest<{Body: CreateGoogleAuthBody}>, reply: FastifyReply) => {
-    const input = request.body
-    const jwtService = new JwtServiceImpl(request.server)
+  googleLogin: async (request: FastifyRequest<{ Querystring: { code: string } }>, reply: FastifyReply) => {
+    // const input = request.body
+    // const jwtService = new JwtServiceImpl(request.server)
 
-    const result = await authWithGoogle(input, { userRepo, jwtService })
-    return reply.send(result)
+    // // const { tokenId } = await client.getToken(code as string)
+
+    // const result = await authWithGoogle(input, { userRepo, jwtService })
+    // return reply.send(result)
+
+    try {
+        const { code } = request.query
+
+        if (!code) {
+          return reply.status(400).send({ message: "No code provided" })
+        }
+        console.log("==========Code=========")
+        console.log(code)
+        console.log("==========Code=========")
+
+        const jwtService = new JwtServiceImpl(request.server)
+
+        // ✅ เรียกจาก OAuth client ไม่ใช่ schema
+        const { tokens } = await googleOAuthClient.getToken(code)
+        console.log("===========Token========")
+        console.log(tokens)
+        console.log("===================")
+
+        const result = await authWithGoogle(
+          tokens.id_token!,
+          { userRepo, jwtService }
+        )
+
+        return reply.send(result)
+
+    } catch (err) {
+        console.error(err)
+        return reply.status(500).send({ message: "Google auth failed" })
+    }
   },
 
   getMe: async (request: FastifyRequest, reply: FastifyReply) => {
