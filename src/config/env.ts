@@ -17,4 +17,8 @@ export const env = {
         clientId: envVar.get("GOOGLE_CLIENT_ID").required().asString(),
         clientSecret: envVar.get("GOOGLE_CLIENT_SECRET").required().asString(),
     },
+
+    jwt: {
+        jwtSecret: envVar.get("JWT_SECRET").required().asString(),
+    },
 };

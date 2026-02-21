@@ -1,6 +1,13 @@
 import { FastifyInstance } from 'fastify'
-import healthRoute from '@service/interfaces/http/routes/health.routes'
+import healthRoutes from '@service/interfaces/http/routes/health.routes'
+import userRoutes from '@service/interfaces/http/routes/user.routes'
+import authRoutes from '@service/interfaces/http/routes/auth.routes'
+import hospitalRoutes from '@service/interfaces/http/routes/hospital.routes'
 
 export const registerRoutes = (app: FastifyInstance) => {
-  app.register(healthRoute, { prefix: '/api/health' })
+  app.register(userRoutes, { prefix: '/api/user' })
+  app.register(authRoutes, { prefix: '/api/auth' })
+  app.register(hospitalRoutes, { prefix: '/api/hospital' })
+
+  app.register(healthRoutes, { prefix: '/api/health' })
 }

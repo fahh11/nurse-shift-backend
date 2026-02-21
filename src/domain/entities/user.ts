@@ -1,0 +1,110 @@
+import {v4 as uuidv4} from 'uuid';
+
+export class User {
+    public readonly userId: string;
+    public firstName: string | null;
+    public lastName: string | null;
+    public nickname: string | null;
+    public birthDate: Date | null;
+    public personalEmail: string;
+    public googleEmailId: string;
+    public lineUserId: string | null;
+    public mobilePhone: string | null;
+    public hospitalId: string | null;
+    public profileCompleted: boolean;
+    public readonly createdAt: Date;
+    public updatedAt: Date;
+
+    constructor(params: {
+        userId?: string
+        firstName?: string | null
+        lastName?: string | null
+        nickname?: string | null
+        birthDate?: Date | null
+        personalEmail: string
+        googleEmailId: string
+        lineUserId?: string | null
+        mobilePhone?: string | null
+        hospitalId?: string | null
+        profileCompleted: boolean
+        createdAt?: Date
+        updatedAt?: Date
+    }) {
+        this.userId = params.userId ?? uuidv4();
+        this.firstName = params.firstName ?? null;
+        this.lastName = params.lastName ?? null;
+        this.nickname = params.nickname ?? null;
+        this.birthDate = params.birthDate ?? null;
+        this.personalEmail = params.personalEmail.trim();
+        this.googleEmailId = params.googleEmailId.trim();
+        this.lineUserId = params.lineUserId ?? null;
+        this.mobilePhone = params.mobilePhone ?? null;
+        this.hospitalId = params.hospitalId ?? null;
+        this.profileCompleted = params.profileCompleted ?? false;
+        this.createdAt = params.createdAt ?? new Date();
+        this.updatedAt = params.updatedAt ?? new Date();
+
+        this.validatePersonalEmail(this.personalEmail);
+        this.validateGoogleEmailId(this.googleEmailId);
+    }
+
+    private validatePersonalEmail(email: string) {
+        if (!email) {
+        throw new Error('Personal email must not be empty')
+        }
+    }
+
+    private validateGoogleEmailId(googleEmailId: string) {
+        if (!googleEmailId) {
+        throw new Error('Google email ID must not be empty')
+        }
+    }
+
+    update(data: {
+        firstName?: string
+        lastName?: string
+        nickname?: string | null
+        birthDate?: Date | null
+        lineUserId?: string
+        mobilePhone?: string
+        hospitalId?: string
+        profileCompleted?: boolean
+    }) {
+        if (data.firstName !== undefined) {
+            const trimmedFirstName = data.firstName?.trim() ?? null;
+            this.firstName = trimmedFirstName;
+        }
+
+        if (data.lastName !== undefined) {
+            const trimmedLastName = data.lastName?.trim() ?? null;
+            this.lastName = trimmedLastName;
+        }
+
+        if (data.nickname !== undefined) {
+            const trimmedNickname = data.nickname?.trim() ?? null;
+            this.nickname = trimmedNickname;
+        }
+
+        if (data.birthDate !== undefined) {
+            this.birthDate = data.birthDate;
+        }
+
+        if (data.lineUserId !== undefined) {
+            this.lineUserId = data.lineUserId;
+        }
+
+        if (data.mobilePhone !== undefined) {
+            this.mobilePhone = data.mobilePhone;
+        }
+
+        if (data.hospitalId !== undefined) {
+            this.hospitalId = data.hospitalId;
+        }
+
+        if (data.profileCompleted !== undefined) {
+            this.profileCompleted = data.profileCompleted;
+        }
+        
+        this.updatedAt = new Date();
+    }
+}
