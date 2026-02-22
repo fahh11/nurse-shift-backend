@@ -12,13 +12,14 @@ import { mapToCompleteProfileOutputDto, mapToUpdateUserOutputDto } from '@servic
 
 export const updateUserForCompleteProfile = async (
     input: UpdateUserForCompleteProfileBody,
+    userId: string,
     logger: FastifyInstance['log'],
     repos: {
         userRepo: UserRepository,
     }
 ): Promise<UpdateUserForCompleteProfileOutputDto> => {
     // หา user จาก personal email
-    const existingUser = await repos.userRepo.findByPersonalEmail(input.email)
+    const existingUser = await repos.userRepo.findById(userId)
     if (!existingUser) {
         logger.error(`User not found.`)
         throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)

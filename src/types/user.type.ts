@@ -4,7 +4,6 @@ export interface CreateUserBody {
 }
 
 export interface UpdateUserForCompleteProfileBody {
-    email: string
     firstName: string
     lastName: string
     hospitalId: string
