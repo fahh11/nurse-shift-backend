@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify'
+import { randomUUID } from 'crypto'
 import { throwCustomError, ErrorDescription } from '@service/helpers/error'
 import { StatusCode } from '@service/enums/statusCode'
 import { UserRepository } from '@service/domain/repositories/user.repository'
@@ -41,7 +42,7 @@ export const updateUserForCompleteProfile = async (
         firstName: input.firstName.toLowerCase(),
         lastName: input.lastName.toLowerCase(),
         // TODO: ยังไม่เพิ่ม line
-        lineUserId: '-',
+        lineUserId: randomUUID(),
         hospitalId: input.hospitalId,
         profileCompleted: true,
     })
