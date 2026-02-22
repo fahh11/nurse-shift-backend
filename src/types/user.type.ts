@@ -4,13 +4,9 @@ export interface CreateUserBody {
 }
 
 export interface UpdateUserForCompleteProfileBody {
-    userId: string
+    email: string
     firstName: string
     lastName: string
-    nickname?: string
-    birthDate?: Date
-    lineUserId: string
-    mobilePhone: string
     hospitalId: string
 }
 
@@ -18,9 +14,6 @@ export interface UpdateUserBody {
     userId: string
     firstName?: string
     lastName?: string
-    nickname?: string
-    birthDate?: Date
     lineUserId?: string
-    mobilePhone?: string
     hospitalId?: string
 }

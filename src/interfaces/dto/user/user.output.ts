@@ -2,12 +2,9 @@ export interface CreateUserOutputDto {
     userId: string
     firstName: string | null
     lastName: string | null
-    nickname: string | null
-    birthDate: Date | null
     personalEmail: string
     googleEmailId: string
     lineUserId: string | null
-    mobilePhone: string | null
     hospitalId: string | null
     profileCompleted: boolean
     createdAt: Date
@@ -18,12 +15,9 @@ export interface UpdateUserForCompleteProfileOutputDto {
     userId: string
     firstName: string
     lastName: string
-    nickname: string | null
-    birthDate: Date | null
     personalEmail: string
     googleEmailId: string
-    lineUserId: string
-    mobilePhone: string
+    lineUserId?: string | null
     hospitalId: string
     profileCompleted: boolean
     createdAt: Date
@@ -34,12 +28,9 @@ export interface UpdateUserOutputDto {
     userId: string
     firstName: string
     lastName: string
-    nickname: string | null
-    birthDate: Date | null
     personalEmail: string
     googleEmailId: string
-    lineUserId: string
-    mobilePhone: string
+    lineUserId?: string
     hospitalId: string
     profileCompleted: boolean
     createdAt: Date

@@ -13,8 +13,7 @@ export const mapToCompleteProfileOutputDto = (
     if (
         !user.firstName ||
         !user.lastName ||
-        !user.lineUserId ||
-        !user.mobilePhone ||
+        // TODO: ยังไม่เอา line id
         !user.hospitalId
     ) {
         logger.error(`Profile marked as completed but required fields are null.`)
@@ -28,12 +27,9 @@ export const mapToCompleteProfileOutputDto = (
         userId: user.userId,
         firstName: user.firstName,
         lastName: user.lastName,
-        nickname: user.nickname,
-        birthDate: user.birthDate,
         personalEmail: user.personalEmail,
         googleEmailId: user.googleEmailId,
         lineUserId: user.lineUserId,
-        mobilePhone: user.mobilePhone,
         hospitalId: user.hospitalId,
         profileCompleted: user.profileCompleted,
         createdAt: user.createdAt,
@@ -49,12 +45,9 @@ export const mapToUpdateUserOutputDto = (
         userId: user.userId,
         firstName: user.firstName!,
         lastName: user.lastName!,
-        nickname: user.nickname,
-        birthDate: user.birthDate,
         personalEmail: user.personalEmail,
         googleEmailId: user.googleEmailId,
         lineUserId: user.lineUserId!,
-        mobilePhone: user.mobilePhone!,
         hospitalId: user.hospitalId!,
         profileCompleted: user.profileCompleted,
         createdAt: user.createdAt,
