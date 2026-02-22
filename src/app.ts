@@ -1,5 +1,7 @@
 import Fastify from 'fastify';
 import fastifyJwt from '@fastify/jwt';
+import cors from '@fastify/cors';
+import { env } from '@service/config/env';
 import { registerRoutes } from '@service/interfaces/http/routes';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { throwCustomError, ErrorDescription } from '@service/helpers/error';
@@ -9,6 +11,12 @@ import '@service/types/fastify';
 export function buildApp() {
   const app = Fastify({
     logger: true,
+  });
+
+  // ✅ เพิ่มตรงนี้เลย
+  app.register(cors, {
+    origin: `${env.frontEnd.redirectUrl}`,
+    credentials: true,
   });
 
   // 🔐 Register JWT plugin BEFORE routes
@@ -29,7 +37,7 @@ export function buildApp() {
   app.decorate(
     "requireCompletedProfile",
     async function (request: FastifyRequest, reply: FastifyReply) {
-      if (!request.user.profileComplete) {
+      if (!request.user.profileCompleted) {
         throwCustomError(
           ErrorDescription.PROFILE_NOT_COMPLETED,
           StatusCode.FORBIDDEN_403

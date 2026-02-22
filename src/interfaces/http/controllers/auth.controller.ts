@@ -43,7 +43,7 @@ export const AuthController = {
 
         const params = new URLSearchParams({
           accessToken: result.accessToken,
-          completeProfile: String(result.profileCompleted),
+          profileCompleted: String(result.profileCompleted),
         })
 
         return reply.redirect(
