@@ -43,7 +43,7 @@ export const authWithGoogle = async (
     const accessToken = repos.jwtService.sign({
         userId: user.userId,
         email: user.personalEmail,
-        profileComplete: user.profileCompleted,
+        profileCompleted: user.profileCompleted,
     })
 
 
