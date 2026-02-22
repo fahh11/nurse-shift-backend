@@ -5,9 +5,8 @@ export const updateUserForCompleteProfileSchema = {
     tags,
     body: {
         type: 'object',
-        required: ['email', 'firstName', 'lastName', 'hospitalId'],
+        required: ['firstName', 'lastName', 'hospitalId'],
         properties: {
-            email: { type: 'string' },
             firstName: { type: 'string' },
             lastName: { type: 'string' },
             hospitalId: { type: 'string' },

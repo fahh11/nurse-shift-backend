@@ -8,8 +8,9 @@ const userRepo = new PrismaUserRepository()
 export const UserController = {
     updateForCompleteProfile: async (request: FastifyRequest<{Body: UpdateUserForCompleteProfileBody}>, reply: FastifyReply) => {
         const input = request.body
+        const currentUser = request.user
 
-        const result = await updateUserForCompleteProfile(input, request.log, {userRepo});
+        const result = await updateUserForCompleteProfile(input, currentUser.userId, request.log, {userRepo});
         return reply.send(result);
     },
     
