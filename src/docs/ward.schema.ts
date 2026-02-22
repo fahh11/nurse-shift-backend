@@ -1,4 +1,4 @@
-import { WardStatus } from "@service/enums/wardStatus";
+import { WardStatus } from '@service/enums/wardStatus';
 
 const tags = ['Ward'];
 
@@ -7,10 +7,9 @@ export const createWardSchema = {
     tags,
     body: {
         type: 'object',
-        required: ['wardName', 'hospitalId'],
+        required: ['wardName'],
         properties: {
             wardName: { type: 'string' },
-            hospitalId: { type: 'string' },
         },
     },
     response: {

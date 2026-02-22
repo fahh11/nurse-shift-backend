@@ -34,7 +34,7 @@ export class PrismaWardRepository implements WardRepository {
     }
 
     async findById(wardId: string): Promise<Ward | null> {
-        const ward = await prisma.ward.findUnique({ where: { ward_id: wardId} })
+        const ward = await prisma.ward.findUnique({ where: { ward_id: wardId } })
         return ward
         ? new Ward({
             wardId: ward.ward_id,

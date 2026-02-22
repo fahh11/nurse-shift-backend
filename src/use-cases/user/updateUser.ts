@@ -17,7 +17,7 @@ export const updateUserForCompleteProfile = async (
     }
 ): Promise<UpdateUserForCompleteProfileOutputDto> => {
     // หา user จาก personal email
-    const existingUser = await repos.userRepo.findById(input.userId)
+    const existingUser = await repos.userRepo.findByPersonalEmail(input.email)
     if (!existingUser) {
         logger.error(`User not found.`)
         throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)
@@ -27,8 +27,6 @@ export const updateUserForCompleteProfile = async (
     if (
         !input.firstName ||
         !input.lastName ||
-        !input.lineUserId ||
-        !input.mobilePhone ||
         !input.hospitalId
     ) {
         logger.error(`Profile information incomplete.`)
@@ -42,10 +40,8 @@ export const updateUserForCompleteProfile = async (
     existingUser.update({
         firstName: input.firstName.toLowerCase(),
         lastName: input.lastName.toLowerCase(),
-        nickname: input.nickname?.toLowerCase() ?? null,
-        birthDate: input.birthDate ?? null,
-        lineUserId: input.lineUserId,
-        mobilePhone: input.mobilePhone,
+        // TODO: ยังไม่เพิ่ม line
+        lineUserId: '-',
         hospitalId: input.hospitalId,
         profileCompleted: true,
     })
@@ -72,12 +68,8 @@ export const updateUser = async (
     existingUser.update({
         firstName: input.firstName?.toLowerCase(),
         lastName: input.lastName?.toLowerCase(),
-        nickname: input.nickname?.toLowerCase() ?? null,
-        birthDate: input.birthDate ?? null,
         lineUserId: input.lineUserId,
-        mobilePhone: input.mobilePhone,
         hospitalId: input.hospitalId,
-        profileCompleted: true,
     })
 
     const updatedUser = await repos.userRepo.update(existingUser)

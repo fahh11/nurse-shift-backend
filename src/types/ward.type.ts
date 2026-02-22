@@ -1,8 +1,7 @@
-import { WardStatus } from "@service/enums/wardStatus"
+import { WardStatus } from '@service/enums/wardStatus'
 
 export interface CreateWardBody {
     wardName: string
-    hospitalId: string
 }
 
 export interface UpdateWardBody {

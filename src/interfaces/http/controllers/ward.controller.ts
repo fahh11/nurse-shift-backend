@@ -5,9 +5,11 @@ import { updateWard } from '@service/use-cases/ward/updateWard'
 import { getAllWardInHospital, getWardById } from '@service/use-cases/ward/getWard'
 import { PrismaWardRepository } from '@service/infrastructure/persistence/prisma/repositories/ward.repository.impl'
 import { PrismaUserRepository } from '@service/infrastructure/persistence/prisma/repositories/user.repository.impl'
+import { PrismaWardMemberRepository } from '@service/infrastructure/persistence/prisma/repositories/wardMember.repository.impl'
 
 const wardRepo = new PrismaWardRepository()
 const userRepo = new PrismaUserRepository()
+const wardMemberRepo = new PrismaWardMemberRepository()
 
 export const WardController = {
     create: async (request: FastifyRequest<{Body: CreateWardBody}>, reply: FastifyReply) => {
@@ -18,7 +20,7 @@ export const WardController = {
             input,
             currentUser.userId,
             request.log,
-            {wardRepo, userRepo}
+            {wardRepo, userRepo, wardMemberRepo}
         );
         return reply.send(result);
     },

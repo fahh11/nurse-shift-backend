@@ -25,6 +25,20 @@ export const ErrorDescription = {
         message: 'You do not have permission to access this ward',
     },
 
+    // Ward Member Errors
+    USER_NOT_IN_WARD_HOSPITAL: {
+        code: 'USER_NOT_IN_WARD_HOSPITAL',
+        message: 'User does not belong to the hospital of this ward',
+    },
+    INVALID_JOIN_CODE: {
+        code: 'INVALID_JOIN_CODE',
+        message: 'Invalid ward join code'
+    },
+    WARD_MEMBER_ALREADY_EXISTS: {
+        code: 'WARD_MEMBER_ALREADY_EXISTS',
+        message: 'Ward member already exists'
+    },
+
     // Not Found Errors
     HOSPITAL_NOT_FOUND: {
         code: 'HOSPITAL_NOT_FOUND',

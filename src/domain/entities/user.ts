@@ -4,12 +4,9 @@ export class User {
     public readonly userId: string;
     public firstName: string | null;
     public lastName: string | null;
-    public nickname: string | null;
-    public birthDate: Date | null;
     public personalEmail: string;
     public googleEmailId: string;
     public lineUserId: string | null;
-    public mobilePhone: string | null;
     public hospitalId: string | null;
     public profileCompleted: boolean;
     public readonly createdAt: Date;
@@ -19,12 +16,9 @@ export class User {
         userId?: string
         firstName?: string | null
         lastName?: string | null
-        nickname?: string | null
-        birthDate?: Date | null
         personalEmail: string
         googleEmailId: string
         lineUserId?: string | null
-        mobilePhone?: string | null
         hospitalId?: string | null
         profileCompleted: boolean
         createdAt?: Date
@@ -33,12 +27,9 @@ export class User {
         this.userId = params.userId ?? uuidv4();
         this.firstName = params.firstName ?? null;
         this.lastName = params.lastName ?? null;
-        this.nickname = params.nickname ?? null;
-        this.birthDate = params.birthDate ?? null;
         this.personalEmail = params.personalEmail.trim();
         this.googleEmailId = params.googleEmailId.trim();
         this.lineUserId = params.lineUserId ?? null;
-        this.mobilePhone = params.mobilePhone ?? null;
         this.hospitalId = params.hospitalId ?? null;
         this.profileCompleted = params.profileCompleted ?? false;
         this.createdAt = params.createdAt ?? new Date();
@@ -80,21 +71,8 @@ export class User {
             this.lastName = trimmedLastName;
         }
 
-        if (data.nickname !== undefined) {
-            const trimmedNickname = data.nickname?.trim() ?? null;
-            this.nickname = trimmedNickname;
-        }
-
-        if (data.birthDate !== undefined) {
-            this.birthDate = data.birthDate;
-        }
-
         if (data.lineUserId !== undefined) {
             this.lineUserId = data.lineUserId;
-        }
-
-        if (data.mobilePhone !== undefined) {
-            this.mobilePhone = data.mobilePhone;
         }
 
         if (data.hospitalId !== undefined) {
