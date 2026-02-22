@@ -17,7 +17,7 @@ export default async function authRoutes(app: FastifyInstance) {
         "/me",
         { 
             attachValidation: true,
-            preHandler: [app.authenticate, app.requireCompletedProfile] 
+            preHandler: [app.authenticate] 
         },
         AuthController.getMe
     );
