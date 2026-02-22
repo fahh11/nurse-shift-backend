@@ -22,4 +22,11 @@ export default async function authRoutes(app: FastifyInstance) {
         AuthController.getMe
     );
 
+    app.post(
+        "/logout",
+        {
+            preHandler: [app.authenticate],
+        }, 
+        AuthController.logout
+    );
 }

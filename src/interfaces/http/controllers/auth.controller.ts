@@ -66,5 +66,9 @@ export const AuthController = {
         {userRepo}
     );
     return reply.send(result);
+  },
+
+  logout: async (_request: FastifyRequest, reply: FastifyReply) => {
+    return reply.send({ message: "Logged out successfully" })
   }
 }
