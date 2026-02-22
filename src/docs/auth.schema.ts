@@ -22,3 +22,22 @@ export const googleCreateUserSchema = {
         },
     },
 };
+
+export const getMeSchema = {
+    description: 'Get user login record',
+    tags,
+    response: {
+        200: {
+            type: 'object',
+            properties: {
+                userId: { type: 'string' },
+                firstName: { type: 'string' },
+                lastName: { type: 'string' },
+                personalEmail: { type: 'string' },
+                lineUserId: { type: ['string', 'null'], nullable: true },
+                hospitalId: { type: 'string' },
+                profileCompleted: { type: 'boolean', default: false },
+            },
+        },
+    },
+};

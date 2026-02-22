@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-export default async function seedUser(
+export default async function seedHospital(
     prisma: PrismaClient
 ) {
     try {

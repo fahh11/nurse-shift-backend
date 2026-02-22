@@ -2,6 +2,7 @@ import { env } from '@service/config/env'
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { CreateGoogleAuthBody } from '@service/types/auth.type'
 import { authWithGoogle } from '@service/use-cases/auth/authWithGoogle'
+import { getMe } from '@service/use-cases/auth/getMe'
 import { PrismaUserRepository } from '@service/infrastructure/persistence/prisma/repositories/user.repository.impl'
 import { JwtServiceImpl } from '@service/infrastructure/http/jwtServiceImpl'
 import { googleOAuthClient } from '@service/infrastructure/http/googleOauth'
@@ -59,11 +60,11 @@ export const AuthController = {
   getMe: async (request: FastifyRequest, reply: FastifyReply) => {
     const user = request.user
 
-    return reply.send({
-        user: {
-            userId: user.userId,
-            personalEmail: user.email,
-        }
-    })
+    const result = await getMe(
+        user.userId,
+        request.log,
+        {userRepo}
+    );
+    return reply.send(result);
   }
 }
