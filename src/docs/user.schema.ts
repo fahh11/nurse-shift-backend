@@ -37,9 +37,7 @@ export const updateUserSchema = {
     tags,
     body: {
         type: 'object',
-        required: ['userId'],
         properties: {
-            userId: { type: 'string' },
             firstName: { type: 'string' },
             lastName: { type: 'string' },
             lineUserId: { type: 'string' },

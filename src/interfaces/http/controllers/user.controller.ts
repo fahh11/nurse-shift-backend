@@ -15,8 +15,9 @@ export const UserController = {
     
     update: async (request: FastifyRequest<{Body: UpdateUserBody}>, reply: FastifyReply) => {
         const input = request.body
+        const currentUser = request.user
 
-        const result = await updateUser(input, request.log, {userRepo});
+        const result = await updateUser(input, currentUser.userId, request.log, {userRepo});
         return reply.send(result);
     }
 }

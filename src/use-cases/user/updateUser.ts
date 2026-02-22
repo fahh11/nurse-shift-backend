@@ -53,13 +53,14 @@ export const updateUserForCompleteProfile = async (
 
 export const updateUser = async (
     input: UpdateUserBody,
+    userId: string,
     logger: FastifyInstance['log'],
     repos: {
         userRepo: UserRepository,
     }
 ): Promise<UpdateUserOutputDto> => {
     // หา user จาก personal email
-    const existingUser = await repos.userRepo.findById(input.userId)
+    const existingUser = await repos.userRepo.findById(userId)
     if (!existingUser) {
         logger.error(`User not found.`)
         throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)

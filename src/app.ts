@@ -17,6 +17,8 @@ export function buildApp() {
   app.register(cors, {
     origin: `${env.frontEnd.redirectUrl}`,
     credentials: true,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   // 🔐 Register JWT plugin BEFORE routes

@@ -11,7 +11,6 @@ export interface UpdateUserForCompleteProfileBody {
 }
 
 export interface UpdateUserBody {
-    userId: string
     firstName?: string
     lastName?: string
     lineUserId?: string
