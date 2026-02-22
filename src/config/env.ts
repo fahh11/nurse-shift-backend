@@ -22,4 +22,8 @@ export const env = {
     jwt: {
         jwtSecret: envVar.get("JWT_SECRET").required().asString(),
     },
+
+    frontEnd: {
+        redirectUrl: envVar.get("FRONTEND_REDIRECT_URL").required().asString(),
+    }
 };

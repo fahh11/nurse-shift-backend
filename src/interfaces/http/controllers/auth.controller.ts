@@ -1,3 +1,4 @@
+import { env } from '@service/config/env' 
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { CreateGoogleAuthBody } from '@service/types/auth.type'
 import { authWithGoogle } from '@service/use-cases/auth/authWithGoogle'
@@ -40,7 +41,14 @@ export const AuthController = {
           { userRepo, jwtService }
         )
 
-        return reply.send(result)
+        const params = new URLSearchParams({
+          accessToken: result.accessToken,
+          completeProfile: String(result.profileCompleted),
+        })
+
+        return reply.redirect(
+          `${env.frontEnd.redirectUrl}/login?${params.toString()}`
+        )
 
     } catch (err) {
         console.error(err)
