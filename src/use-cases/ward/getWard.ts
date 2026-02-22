@@ -33,6 +33,7 @@ export const getAllWardInHospital = async (
 
             return {
                 wardId: record.wardId,
+                wardName: record.wardName,
                 hospitalId: record.hospitalId,
                 joinCode: record.joinCode,
                 joinCodeStatus: record.joinCodeStatus,
