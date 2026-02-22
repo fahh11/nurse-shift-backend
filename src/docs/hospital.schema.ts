@@ -50,3 +50,20 @@ export const updateHospitalSchema = {
         },
     },
 };
+
+export const getAllHospitalSchema = {
+    description: 'Get all hospital record',
+    tags,
+    response: {
+        200: {
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    hospitalId: { type: 'string' },
+                    name: { type: 'string' },
+                },
+            },
+        },
+    },
+};
