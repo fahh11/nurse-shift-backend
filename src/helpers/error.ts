@@ -70,6 +70,10 @@ export const ErrorDescription = {
         code: 'SHIFT_TEMPLATE_NOT_FOUND',
         message: 'Shift template not found.',
     },
+    SHIFT_REQUIREMENT_NOT_FOUND: {
+        code: 'SHIFT_REQUIREMENT_NOT_FOUND',
+        message: 'Shift requirement not found.',
+    },
 
     // Server Errors
     INTERNAL_SERVER_ERROR: {

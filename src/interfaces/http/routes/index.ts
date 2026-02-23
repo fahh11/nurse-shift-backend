@@ -6,6 +6,7 @@ import hospitalRoutes from '@service/interfaces/http/routes/hospital.routes'
 import wardRoutes from '@service/interfaces/http/routes/ward.routes'
 import wardMemberRoutes from '@service/interfaces/http/routes/wardMember.routes'
 import shiftTemplateRoutes from '@service/interfaces/http/routes/shiftTemplate.routes'
+import shiftRequirementeRoutes from '@service/interfaces/http/routes/shiftRequirement.routes'
 
 export const registerRoutes = (app: FastifyInstance) => {
   app.register(userRoutes, { prefix: '/api/user' })
@@ -14,6 +15,7 @@ export const registerRoutes = (app: FastifyInstance) => {
   app.register(wardRoutes, { prefix: '/api/ward' })
   app.register(wardMemberRoutes, { prefix: '/api/ward-member' })
   app.register(shiftTemplateRoutes, { prefix: '/api/shift-template' })
+  app.register(shiftRequirementeRoutes, { prefix: '/api/shift-requirement' })
 
   app.register(healthRoutes, { prefix: '/api/health' })
 }

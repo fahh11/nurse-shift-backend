@@ -11,6 +11,7 @@ import { WardRepository } from '@service/domain/repositories/ward.repository'
 
 export const createShiftRequirement = async(
     input: CreateShiftRequirementBody,
+    shiftTemplateId: string,
     userId: string,
     logger: FastifyInstance['log'],
     repos: {
@@ -28,7 +29,7 @@ export const createShiftRequirement = async(
     }
 
     // หา shift_template
-    const shiftTemplateData = await repos.shiftTemplateRepo.findById(input.shiftTemplateId)
+    const shiftTemplateData = await repos.shiftTemplateRepo.findById(shiftTemplateId)
     if (!shiftTemplateData) {
         logger.error('Shift template not found')
         throw throwCustomError(ErrorDescription.SHIFT_TEMPLATE_NOT_FOUND, StatusCode.NOT_FOUND_404)
@@ -52,7 +53,7 @@ export const createShiftRequirement = async(
 
     // 1. หา requirement ล่าสุดของ shiftTemplateId นี้
     const latestRequirement = await repos.shiftRequirementRepo.findActiveByShiftTemplateId(
-        input.shiftTemplateId
+        shiftTemplateId
     )
 
     // 2. ถ้ามีตัวเก่า → ปิดมัน
@@ -66,7 +67,7 @@ export const createShiftRequirement = async(
 
     // create shift requirement
     const newShiftRequirement = new ShiftRequirement({
-        shiftTemplateId: input.shiftTemplateId,
+        shiftTemplateId: shiftTemplateId,
         requiredPeople: input.requiredPeople,
         effectiveFrom: today,
         effectiveTo: null,
