@@ -6,10 +6,12 @@ import { getAllShiftTemplateInWard } from '@service/use-cases/shift-template/get
 import { PrismaShiftTemplateRepository } from '@service/infrastructure/persistence/prisma/repositories/shiftTemplate.repository.impl'
 import { PrismaUserRepository } from '@service/infrastructure/persistence/prisma/repositories/user.repository.impl'
 import { PrismaWardRepository } from '@service/infrastructure/persistence/prisma/repositories/ward.repository.impl'
+import { PrismaShiftRequirementRepository } from '@service/infrastructure/persistence/prisma/repositories/shiftRequirement.repository.impl'
 
 const shiftTemplateRepo = new PrismaShiftTemplateRepository()
 const userRepo = new PrismaUserRepository()
 const wardRepo = new PrismaWardRepository()
+const shiftRequirementRepo = new PrismaShiftRequirementRepository()
 
 export const ShiftTemplateController = {
     create: async (request: FastifyRequest<{Body: CreateShiftTemplateBody}>, reply: FastifyReply) => {
@@ -50,7 +52,7 @@ export const ShiftTemplateController = {
         const result = await getAllShiftTemplateInWard(
             wardId,
             request.log,
-            {shiftTemplateRepo}
+            {shiftTemplateRepo, shiftRequirementRepo}
         );
         return reply.send(result);
     }
