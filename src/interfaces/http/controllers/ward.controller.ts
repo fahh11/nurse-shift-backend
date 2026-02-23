@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 import { CreateWardBody, UpdateWardBody } from '@service/types/ward.type'
 import { createWard } from '@service/use-cases/ward/createWard'
 import { updateWard } from '@service/use-cases/ward/updateWard'
-import { getAllWardInHospital, enterWard } from '@service/use-cases/ward/getWard'
+import { getAllWardInHospital, enterWard, getWardById } from '@service/use-cases/ward/getWard'
 import { PrismaWardRepository } from '@service/infrastructure/persistence/prisma/repositories/ward.repository.impl'
 import { PrismaUserRepository } from '@service/infrastructure/persistence/prisma/repositories/user.repository.impl'
 import { PrismaWardMemberRepository } from '@service/infrastructure/persistence/prisma/repositories/wardMember.repository.impl'
@@ -61,6 +61,19 @@ export const WardController = {
             currentUser.userId,
             request.log,
             {wardRepo, userRepo, wardMemberRepo}
+        );
+        return reply.send(result);
+    },
+
+    getWardById: async (request: FastifyRequest, reply: FastifyReply) => {
+        const currentUser = request.user
+
+        const { wardId } = request.params as { wardId: string }
+
+        const result = await getWardById(
+            wardId,
+            request.log,
+            {wardRepo, userRepo, hospitalRepo}
         );
         return reply.send(result);
     }

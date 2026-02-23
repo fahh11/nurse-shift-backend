@@ -4,7 +4,8 @@ import { CreateWardBody, UpdateWardBody } from '@service/types/ward.type';
 import { createWardSchema, 
         updateWardSchema,
         getAllWardInHospitalSchema,
-        enterWardSchema
+        enterWardSchema,
+        getWardByIdSchema
     } from '@service/docs/ward.schema';
 
 export default async function wardRoutes(app: FastifyInstance) {
@@ -46,5 +47,15 @@ export default async function wardRoutes(app: FastifyInstance) {
             preHandler: [app.authenticate, app.requireCompletedProfile] 
         },
         WardController.enterWard
+    );
+
+    app.get(
+        '/getWardById/:wardId',
+        {
+            attachValidation: true,
+            schema: getWardByIdSchema,
+            preHandler: [app.authenticate, app.requireCompletedProfile] 
+        },
+        WardController.getWardById
     );
 }

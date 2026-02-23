@@ -35,7 +35,7 @@ export const createWardMemberSchema = {
 export const getAllWardMemberInWardSchema = {
     description: 'Get all ward member in ward',
     tags,
-    body: {
+    params: {
         type: 'object',
         required: ['wardId'],
         properties: {

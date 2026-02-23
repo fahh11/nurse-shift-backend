@@ -11,6 +11,7 @@ import { CreateWardMemberOutputDto } from '@service/interfaces/dto/ward-member/w
 
 export const createWardMember = async(
     input: CreateWardMemberBody,
+    wardId: string,
     userId: string,
     logger: FastifyInstance['log'],
     repos: {
@@ -30,7 +31,7 @@ export const createWardMember = async(
     }
 
     // หา ward ที่ต้องการเข้าร่วม
-    const wardData = await repos.wardRepo.findById(input.wardId)
+    const wardData = await repos.wardRepo.findById(wardId)
     if (!wardData) {
         logger.error('Ward not found')
         throw throwCustomError(

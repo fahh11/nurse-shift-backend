@@ -84,3 +84,42 @@ export const enterWard = async (
 
     return result
 }
+
+export const getWardById = async (
+    wardId: string,
+    logger: FastifyInstance['log'],
+    repos: {
+        wardRepo: WardRepository
+        userRepo: UserRepository
+        hospitalRepo: HospitalRepository
+    }
+) => {
+    // หา ward ที่ต้องการ
+    const wardData = await repos.wardRepo.findById(wardId)
+    if (!wardData) {
+        logger.error('Ward not found')
+        throw throwCustomError(ErrorDescription.WARD_NOT_FOUND, StatusCode.NOT_FOUND_404)
+    }
+
+    // หา hospital ที่ต้องการ
+    const hospitalData = await repos.hospitalRepo.findById(wardData.hospitalId)
+    if (!hospitalData) {
+        logger.error('Hospital not found')
+        throw throwCustomError(ErrorDescription.HOSPITAL_NOT_FOUND, StatusCode.NOT_FOUND_404)
+    }
+
+    // หา ward owner
+    const wardOwner = await repos.userRepo.findById(wardData.createdBy)
+    if (!wardOwner) {
+        logger.error('User not found')
+        throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)
+    }
+
+    const result = {
+        wardName: wardData.wardName,
+        hospitalName: hospitalData.name,
+        createdBy: `${wardOwner.firstName} ${wardOwner.lastName}`
+    }
+
+    return result
+}
