@@ -50,14 +50,14 @@ export const getAllWardInHospital = async (
     return result
 }
 
-export const getWardById = async (
+export const enterWard = async (
     wardId: string,
     userId: string,
     logger: FastifyInstance['log'],
     repos: {
         wardRepo: WardRepository
         userRepo: UserRepository
-        hospitalRepo: HospitalRepository
+        wardMemberRepo: WardMemberRepository
     }
 ) => {
     // หา user ปัจจุบันจาก id
@@ -74,26 +74,12 @@ export const getWardById = async (
         throw throwCustomError(ErrorDescription.WARD_NOT_FOUND, StatusCode.NOT_FOUND_404)
     }
 
-    // หา ward owner
-    const wardOwner = await repos.userRepo.findById(wardData.createdBy)
-    if (!wardOwner) {
-        logger.error('Ward owner not found')
-        throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)
-    }
-
-    // หา hospital ของ ward
-    const hospitalData = await repos.hospitalRepo.findById(wardData.hospitalId)
-    if (!hospitalData) {
-        logger.error('Hospital not found')
-        throw throwCustomError(ErrorDescription.HOSPITAL_NOT_FOUND, StatusCode.NOT_FOUND_404)
-    }
+    // หาว่า user นี้เป็น member ของ ward นี้ไหม
+    const wardMember = await repos.wardMemberRepo.findByUserIdAndWardId(currentUser.userId, wardData.wardId)
 
     const result = {
         wardId: wardData.wardId,
-        wardName: wardData.wardName,
-        hospitalName: hospitalData.name,
-        joinCode: wardData.joinCode,
-        createdBy: `${wardOwner.firstName} ${wardOwner.lastName}`,
+        isMember: !!wardMember,   // 👈 แปลงเป็น boolean
     }
 
     return result

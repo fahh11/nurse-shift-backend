@@ -83,8 +83,8 @@ export const getAllWardInHospitalSchema = {
     },
 };
 
-export const getWardByIdSchema = {
-    description: 'Get ward by ward id',
+export const enterWardSchema = {
+    description: 'Enter ward',
     tags,
     params: {
         type: 'object',
@@ -98,10 +98,7 @@ export const getWardByIdSchema = {
             type: 'object',
             properties: {
                 wardId: { type: 'string' },
-                wardName: { type: 'string' },
-                hospitalName: { type: 'string' },
-                joinCode: { type: 'string' },
-                createdBy: { type: 'string' },
+                isMember: { type: 'boolean' },
             },
         },
     },

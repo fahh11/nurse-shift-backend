@@ -5,11 +5,16 @@ const tags = ['WardMember'];
 export const createWardMemberSchema = {
     description: 'Create a new ward member record',
     tags,
-    body: {
+    params: {
         type: 'object',
         required: ['wardId'],
         properties: {
             wardId: { type: 'string' },
+        },
+    },
+    body: {
+        type: 'object',
+        properties: {
             joinCode: { type: 'string' },
         },
     },
