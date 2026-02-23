@@ -4,7 +4,7 @@ import { UpdateHospitalBody } from '@service/types/hospital.type';
 import { HospitalController } from '@service/interfaces/http/controllers/hospital.controller';
 import { createHospitalSchema } from '@service/docs/hospital.schema';
 import { updateHospitalSchema } from '@service/docs/hospital.schema';
-import { getAllHospitalSchema } from '@service/docs/hospital.schema';
+import { getAllHospitalSchema, getUserHospitalSchema } from '@service/docs/hospital.schema';
 
 export default async function hospitalRoutes(app: FastifyInstance) {
     app.post<{Body: CreateHospitalBody}>(
@@ -35,5 +35,15 @@ export default async function hospitalRoutes(app: FastifyInstance) {
             preHandler: [app.authenticate] 
         },
         HospitalController.getAllHospital
+    );
+
+    app.get(
+        '/getUserHospital',
+        {
+            attachValidation: true,
+            schema: getUserHospitalSchema,
+            preHandler: [app.authenticate] 
+        },
+        HospitalController.getUserHospital
     );
 }
