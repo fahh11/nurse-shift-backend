@@ -4,6 +4,8 @@ import { StatusCode } from '@service/enums/statusCode'
 import { WardRepository } from '@service/domain/repositories/ward.repository'
 import { UserRepository } from '@service/domain/repositories/user.repository'
 import { WardMemberRepository } from '@service/domain/repositories/wardMember.repository'
+import { HospitalRepository } from '@service/domain/repositories/hospital.repository'
+import { WardStatus } from '@service/enums/wardStatus'
 
 export const getAllWardInHospital = async (
     userId: string,
@@ -21,9 +23,9 @@ export const getAllWardInHospital = async (
         throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)
     }
 
-    // ward ทั้งหมดใน hospital ที่ user นี้อยู่
-    const allWardRecords = await repos.wardRepo.findByHospitalId(currentUser.hospitalId!)
-
+    // ward ที่ active ทั้งหมดใน hospital ที่ user นี้อยู่
+    const allWardRecords = await repos.wardRepo.findByHospitalId(currentUser.hospitalId!, WardStatus.ACTIVE)
+    
     const result = await Promise.all(
         allWardRecords.map(async (record) => {
             // หา user เจ้าของ ward
@@ -53,8 +55,9 @@ export const getWardById = async (
     userId: string,
     logger: FastifyInstance['log'],
     repos: {
-        wardRepo: WardRepository,
-        userRepo: UserRepository,
+        wardRepo: WardRepository
+        userRepo: UserRepository
+        hospitalRepo: HospitalRepository
     }
 ) => {
     // หา user ปัจจุบันจาก id
@@ -64,7 +67,7 @@ export const getWardById = async (
         throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)
     }
 
-    // ward ทั้งหมดใน hospital ที่ user นี้อยู่
+    // หา ward ที่ต้องการ
     const wardData = await repos.wardRepo.findById(wardId)
     if (!wardData) {
         logger.error('Ward not found')
@@ -78,15 +81,19 @@ export const getWardById = async (
         throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)
     }
 
+    // หา hospital ของ ward
+    const hospitalData = await repos.hospitalRepo.findById(wardData.hospitalId)
+    if (!hospitalData) {
+        logger.error('Hospital not found')
+        throw throwCustomError(ErrorDescription.HOSPITAL_NOT_FOUND, StatusCode.NOT_FOUND_404)
+    }
+
     const result = {
         wardId: wardData.wardId,
         wardName: wardData.wardName,
-        hospitalId: wardData.hospitalId,
+        hospitalName: hospitalData.name,
         joinCode: wardData.joinCode,
-        joinCodeStatus: wardData.joinCodeStatus,
-        status: wardData.status,
         createdBy: `${wardOwner.firstName} ${wardOwner.lastName}`,
-        updatedBy: `${wardOwner.firstName} ${wardOwner.lastName}`,
     }
 
     return result
