@@ -103,3 +103,25 @@ export const enterWardSchema = {
         },
     },
 };
+
+export const getWardByIdSchema = {
+    description: 'Get ward by id',
+    tags,
+    params: {
+        type: 'object',
+        required: ['wardId'],
+        properties: {
+            wardId: { type: 'string' }
+        },
+    },
+    response: {
+        200: {
+            type: 'object',
+            properties: {
+                wardName: { type: 'string' },
+                hospitalName: { type: 'string' },
+                createdBy: { type: 'string' },
+            },
+        },
+    },
+};
