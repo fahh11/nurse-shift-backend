@@ -1,7 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-import { Ward } from "@service/domain/entities/ward";
-import { WardRepository } from "@service/domain/repositories/ward.repository";
-import { WardStatus } from "@service/enums/wardStatus";
+import { PrismaClient } from '@prisma/client';
+import { Ward } from '@service/domain/entities/ward';
+import { WardRepository } from '@service/domain/repositories/ward.repository';
+import { WardStatus } from '@service/enums/wardStatus';
 
 const prisma = new PrismaClient();
 

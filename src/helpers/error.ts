@@ -39,6 +39,20 @@ export const ErrorDescription = {
         message: 'Ward member already exists'
     },
 
+    // Shift Template Erros
+    SHIFT_TEMPLATE_TYPE_DUPLICATE: {
+        code: 'SHIFT_TEMPLATE_TYPE_DUPLICATE',
+        message: 'Shift template type already exists in this ward',
+    },
+    SHIFT_TEMPLATE_LIMIT_EXCEEDED: {
+        code: 'SHIFT_TEMPLATE_LIMIT_EXCEEDED',
+        message: 'Shift template limit exceeded in this ward',
+    },
+    SHIFT_TEMPLATE_TIME_OVERLAP:{
+        code: 'SHIFT_TEMPLATE_TIME_OVERLAP',
+        message: 'Shift template time overlaps with existing shift',
+    },
+
     // Not Found Errors
     HOSPITAL_NOT_FOUND: {
         code: 'HOSPITAL_NOT_FOUND',
@@ -51,6 +65,10 @@ export const ErrorDescription = {
     WARD_NOT_FOUND: {
         code: 'WARD_NOT_FOUND',
         message: 'Ward not found.',
+    },
+    SHIFT_TEMPLATE_NOT_FOUND: {
+        code: 'SHIFT_TEMPLATE_NOT_FOUND',
+        message: 'Shift template not found.',
     },
 
     // Server Errors
