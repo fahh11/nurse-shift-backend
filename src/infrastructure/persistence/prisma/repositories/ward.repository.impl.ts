@@ -50,8 +50,13 @@ export class PrismaWardRepository implements WardRepository {
         }) : null
     }
 
-    async findByHospitalId(hospitalId: string): Promise<Ward[]> {
-        const wards = await prisma.ward.findMany({ where: { hospital_id: hospitalId } })
+    async findByHospitalId(hospitalId: string, status?: WardStatus): Promise<Ward[]> {
+        const wards = await prisma.ward.findMany({ 
+            where: { 
+                hospital_id: hospitalId,
+                ...(status !== undefined && { status: status }),
+            } 
+        })
         return wards.map(
             (ward) => 
                 new Ward({

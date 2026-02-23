@@ -99,12 +99,9 @@ export const getWardByIdSchema = {
             properties: {
                 wardId: { type: 'string' },
                 wardName: { type: 'string' },
-                hospitalId: { type: 'string' },
+                hospitalName: { type: 'string' },
                 joinCode: { type: 'string' },
-                joinCodeStatus: { type: 'string' },
-                status: { type: 'string', enum: Object.values(WardStatus) },
                 createdBy: { type: 'string' },
-                updatedBy: { type: 'string' },
             },
         },
     },
