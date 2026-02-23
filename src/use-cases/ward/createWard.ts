@@ -10,7 +10,7 @@ import { WardMemberRepository } from '@service/domain/repositories/wardMember.re
 import { WardMemberRole } from '@service/enums/wardMemberRole'
 import { CreateWardBody } from '@service/types/ward.type'
 import { CreateWardOutputDto } from '@service/interfaces/dto/ward/ward.output'
-import { generateJoinCode } from '@service/helpers/wardHelper'
+import { generateJoinCode } from '@service/helpers/ward'
 import { isUniqueConstraintError } from '@service/helpers/dbErrorHelper'
 
 const MAX_RETRY = 5
