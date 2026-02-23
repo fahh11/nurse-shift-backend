@@ -3,13 +3,15 @@ import { throwCustomError, ErrorDescription } from '@service/helpers/error'
 import { StatusCode } from '@service/enums/statusCode'
 import { WardRepository } from '@service/domain/repositories/ward.repository'
 import { UserRepository } from '@service/domain/repositories/user.repository'
+import { WardMemberRepository } from '@service/domain/repositories/wardMember.repository'
 
 export const getAllWardInHospital = async (
     userId: string,
     logger: FastifyInstance['log'],
     repos: {
-        wardRepo: WardRepository,
-        userRepo: UserRepository,
+        wardRepo: WardRepository
+        userRepo: UserRepository
+        wardMemberRepo: WardMemberRepository
     }
 ) => {
     // หา user ปัจจุบันจาก id
@@ -31,15 +33,14 @@ export const getAllWardInHospital = async (
                 throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)
             }
 
+            // นับจำนวนคนใน ward 
+            const wardMembers = await repos.wardMemberRepo.findByWardId(record.wardId)
+
             return {
                 wardId: record.wardId,
                 wardName: record.wardName,
-                hospitalId: record.hospitalId,
-                joinCode: record.joinCode,
-                joinCodeStatus: record.joinCodeStatus,
-                status: record.status,
+                member: wardMembers.length,
                 createdBy: `${wardOwner.firstName} ${wardOwner.lastName}`,
-                updatedBy: `${wardOwner.firstName} ${wardOwner.lastName}`,
             }
         })
     );

@@ -44,7 +44,7 @@ export const WardController = {
         const result = await getAllWardInHospital(
             currentUser.userId,
             request.log,
-            {wardRepo, userRepo}
+            {wardRepo, userRepo, wardMemberRepo}
         );
         return reply.send(result);
     },
