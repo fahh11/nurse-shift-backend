@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@service/lib/prisma';
 import { User } from '@service/domain/entities/user'
 import { UserRepository } from '@service/domain/repositories/user.repository'
-
-const prisma = new PrismaClient()
 
 export class PrismaUserRepository implements UserRepository {
     async create(user: User): Promise<User> {
@@ -20,6 +18,8 @@ export class PrismaUserRepository implements UserRepository {
             personalEmail: created.personal_email,
             googleEmailId: created.google_email_id,
             lineUserId: created.line_user_id,
+            lineLinkToken: created.line_link_token,
+            lineLinkTokenExpire: created.line_link_token_expire,
             hospitalId: created.hospital_id,
             profileCompleted: created.profile_completed,
             createdAt: created.created_at,
@@ -37,6 +37,8 @@ export class PrismaUserRepository implements UserRepository {
             personalEmail: user.personal_email,
             googleEmailId: user.google_email_id,
             lineUserId: user.line_user_id,
+            lineLinkToken: user.line_link_token,
+            lineLinkTokenExpire: user.line_link_token_expire,
             hospitalId: user.hospital_id,
             profileCompleted: user.profile_completed,
             createdAt: user.created_at,
@@ -55,6 +57,8 @@ export class PrismaUserRepository implements UserRepository {
             personalEmail: user.personal_email,
             googleEmailId: user.google_email_id,
             lineUserId: user.line_user_id,
+            lineLinkToken: user.line_link_token,
+            lineLinkTokenExpire: user.line_link_token_expire,
             hospitalId: user.hospital_id,
             profileCompleted: user.profile_completed,
             createdAt: user.created_at,
@@ -74,6 +78,8 @@ export class PrismaUserRepository implements UserRepository {
                     personalEmail: user.personal_email,
                     googleEmailId: user.google_email_id,
                     lineUserId: user.line_user_id,
+                    lineLinkToken: user.line_link_token,
+                    lineLinkTokenExpire: user.line_link_token_expire,
                     hospitalId: user.hospital_id,
                     profileCompleted: user.profile_completed,
                     createdAt: user.created_at,
@@ -91,6 +97,8 @@ export class PrismaUserRepository implements UserRepository {
                 personal_email: user.personalEmail,
                 google_email_id: user.googleEmailId,
                 line_user_id: user.lineUserId,
+                line_link_token: user.lineLinkToken,
+                line_link_token_expire: user.lineLinkTokenExpire,
                 hospital_id: user.hospitalId,
                 profile_completed: user.profileCompleted,
                 updated_at: new Date(),
@@ -104,6 +112,8 @@ export class PrismaUserRepository implements UserRepository {
             personalEmail: updated.personal_email,
             googleEmailId: updated.google_email_id,
             lineUserId: updated.line_user_id,
+            lineLinkToken: updated.line_link_token,
+            lineLinkTokenExpire: updated.line_link_token_expire,
             hospitalId: updated.hospital_id,
             profileCompleted: updated.profile_completed,
             createdAt: updated.created_at,

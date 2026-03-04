@@ -4,8 +4,6 @@ export default async function seedHospital(
     prisma: PrismaClient
 ) {
     try {
-        console.log("🌱 Seeding hospitals...");
-
         await prisma.hospital.createMany({
             data: [
                 {
@@ -20,6 +18,11 @@ export default async function seedHospital(
         });
 
         console.log("✅ Seeding hospitals completed.");
+
+        // 🔥 ดึงข้อมูลที่เพิ่งสร้างกลับมา
+        const hospitals = await prisma.hospital.findMany()
+
+        return hospitals 
         
     } catch (error) {
         console.error("❌ Seeding hospitals failed:", error);
