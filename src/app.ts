@@ -7,6 +7,9 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { throwCustomError, ErrorDescription } from '@service/helpers/error';
 import { StatusCode } from '@service/enums/statusCode';
 import '@service/types/fastify';
+import { PrismaUserRepository } from '@service/infrastructure/persistence/prisma/repositories/user.repository.impl';
+
+const userRepo = new PrismaUserRepository();
 
 export function buildApp() {
   const app = Fastify({
@@ -39,7 +42,9 @@ export function buildApp() {
   app.decorate(
     "requireCompletedProfile",
     async function (request: FastifyRequest, reply: FastifyReply) {
-      if (!request.user.profileCompleted) {
+      const user = await userRepo.findById(request.user.userId);
+
+      if (!user?.profileCompleted) {
         throwCustomError(
           ErrorDescription.PROFILE_NOT_COMPLETED,
           StatusCode.FORBIDDEN_403

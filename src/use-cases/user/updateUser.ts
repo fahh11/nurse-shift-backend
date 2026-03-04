@@ -42,8 +42,6 @@ export const updateUserForCompleteProfile = async (
     existingUser.update({
         firstName: input.firstName.toLowerCase(),
         lastName: input.lastName.toLowerCase(),
-        // TODO: ยังไม่เพิ่ม line
-        lineUserId: randomUUID(),
         hospitalId: input.hospitalId,
         profileCompleted: true,
     })

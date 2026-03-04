@@ -1,9 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@service/lib/prisma';
 import { ShiftTemplate } from '@service/domain/entities/shiftTemplate';
 import { ShiftTemplateRepository } from '@service/domain/repositories/shiftTemplate.repository';
 import { ShiftTemplateType } from '@service/enums/shiftTemplateType';
-
-const prisma = new PrismaClient();
 
 export class PrismaShiftTemplateRepository implements ShiftTemplateRepository {
     async create(shiftTemplate: ShiftTemplate): Promise<ShiftTemplate> {

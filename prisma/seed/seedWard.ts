@@ -2,14 +2,14 @@ import { PrismaClient } from '@prisma/client';
 import { WardStatus } from '@prisma/client';
 
 export default async function seedWard(
-    prisma: PrismaClient
+    prisma: PrismaClient,
+    hospitalId: string,
+    userId: string
 ) {
     try {
-        console.log("🌱 Seeding wards...");
-
         // เอา user กับ hospital มาก่อน (ต้องมีอยู่แล้ว)
-        const user = await prisma.user.findUnique({ where: { personal_email: 'admin.admin@gmail.com' } })
-        const hospital = await prisma.hospital.findFirst()
+        const user = await prisma.user.findUnique({ where: { user_id: userId } })
+        const hospital = await prisma.hospital.findUnique({ where: { hospital_id: hospitalId } })
 
         await prisma.ward.createMany({
             data: [

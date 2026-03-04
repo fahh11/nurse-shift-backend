@@ -1,14 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 
 export default async function seedUser(
-    prisma: PrismaClient
+    prisma: PrismaClient,
+    hospitalId: string
 ) {
     try {
-        console.log("🌱 Seeding User...");
-
-         // เอา user กับ hospital มาก่อน (ต้องมีอยู่แล้ว)
-        const user = await prisma.user.findFirst()
-        const hospital = await prisma.hospital.findFirst()
+         // เอา hospital มาก่อน (ต้องมีอยู่แล้ว)
+        const hospital = await prisma.hospital.findUnique({ where: { hospital_id: hospitalId } })
 
         await prisma.user.createMany({
             data: [
@@ -18,7 +16,6 @@ export default async function seedUser(
                     last_name: 'admin',
                     personal_email: 'admin.admin@gmail.com',
                     google_email_id: '100242314638791242954',
-                    line_user_id: '-',
                     hospital_id: hospital?.hospital_id,
                     profile_completed: true,
                     created_at: new Date(),
@@ -28,6 +25,11 @@ export default async function seedUser(
         });
 
         console.log("✅ Seeding user completed.");
+
+        // 🔥 ดึงข้อมูลที่เพิ่งสร้างกลับมา
+        const users = await prisma.user.findMany()
+
+        return users
         
     } catch (error) {
         console.error("❌ Seeding user failed:", error);
