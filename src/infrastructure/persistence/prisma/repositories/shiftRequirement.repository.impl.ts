@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@service/lib/prisma'
 import { ShiftRequirement } from '@service/domain/entities/shiftRequirement';
 import { ShiftRequirementRepository } from '@service/domain/repositories/shiftRequirement.repository';
-
-const prisma = new PrismaClient();
 
 export class PrismaShiftRequirementRepository implements ShiftRequirementRepository {
     async create(shiftRequirement: ShiftRequirement): Promise<ShiftRequirement> {

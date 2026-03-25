@@ -1,9 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@service/lib/prisma';
 import { WardMember } from '@service/domain/entities/wardMember';
 import { WardMemberRepository } from '@service/domain/repositories/wardMember.repository';
 import { WardMemberRole } from '@service/enums/wardMemberRole';
-
-const prisma = new PrismaClient()
 
 export class PrismaWardMemberRepository implements WardMemberRepository {
     async create(wardMember: WardMember): Promise<WardMember> {

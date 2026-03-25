@@ -7,6 +7,8 @@ export class User {
     public personalEmail: string;
     public googleEmailId: string;
     public lineUserId: string | null;
+    public lineLinkToken: string | null;
+    public lineLinkTokenExpire: Date | null;
     public hospitalId: string | null;
     public profileCompleted: boolean;
     public readonly createdAt: Date;
@@ -19,6 +21,8 @@ export class User {
         personalEmail: string
         googleEmailId: string
         lineUserId?: string | null
+        lineLinkToken?: string | null
+        lineLinkTokenExpire?: Date | null
         hospitalId?: string | null
         profileCompleted: boolean
         createdAt?: Date
@@ -30,6 +34,8 @@ export class User {
         this.personalEmail = params.personalEmail.trim();
         this.googleEmailId = params.googleEmailId.trim();
         this.lineUserId = params.lineUserId ?? null;
+        this.lineLinkToken = params.lineLinkToken ?? null;
+        this.lineLinkTokenExpire = params.lineLinkTokenExpire ?? null;
         this.hospitalId = params.hospitalId ?? null;
         this.profileCompleted = params.profileCompleted ?? false;
         this.createdAt = params.createdAt ?? new Date();
@@ -57,6 +63,8 @@ export class User {
         nickname?: string | null
         birthDate?: Date | null
         lineUserId?: string
+        lineLinkToken?: string | null
+        lineLinkTokenExpire?: Date | null
         mobilePhone?: string
         hospitalId?: string
         profileCompleted?: boolean
@@ -73,6 +81,14 @@ export class User {
 
         if (data.lineUserId !== undefined) {
             this.lineUserId = data.lineUserId;
+        }
+
+        if (data.lineLinkToken !== undefined) {
+            this.lineLinkToken = data.lineLinkToken;
+        }
+
+        if (data.lineLinkTokenExpire !== undefined) {
+            this.lineLinkTokenExpire = data.lineLinkTokenExpire;
         }
 
         if (data.hospitalId !== undefined) {

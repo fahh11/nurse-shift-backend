@@ -67,3 +67,17 @@ export const getAllHospitalSchema = {
         },
     },
 };
+
+export const getUserHospitalSchema = {
+    description: 'Get hospital record of this user',
+    tags,
+    response: {
+        200: {
+            type: 'object',
+            properties: {
+                hospitalId: { type: 'string' },
+                name: { type: 'string' },
+            },
+        },
+    },
+};
