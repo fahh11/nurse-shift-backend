@@ -72,8 +72,9 @@ export const WardController = {
 
         const result = await getWardById(
             wardId,
+            currentUser.userId,
             request.log,
-            {wardRepo, userRepo, hospitalRepo}
+            {wardRepo, wardMemberRepo, userRepo, hospitalRepo}
         );
         return reply.send(result);
     }

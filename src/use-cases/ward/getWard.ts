@@ -87,13 +87,22 @@ export const enterWard = async (
 
 export const getWardById = async (
     wardId: string,
+    userId: string,
     logger: FastifyInstance['log'],
     repos: {
         wardRepo: WardRepository
+        wardMemberRepo: WardMemberRepository
         userRepo: UserRepository
         hospitalRepo: HospitalRepository
     }
 ) => {
+    // หา user ปัจจุบันจาก id
+    const currentUser = await repos.userRepo.findById(userId)
+    if (!currentUser) {
+        logger.error('User not found')
+        throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)
+    }
+
     // หา ward ที่ต้องการ
     const wardData = await repos.wardRepo.findById(wardId)
     if (!wardData) {
@@ -115,11 +124,19 @@ export const getWardById = async (
         throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)
     }
 
+    // หา role ของ current user
+    const wardMemberData = await repos.wardMemberRepo.findByUserIdAndWardId(currentUser.userId, wardData.wardId)
+    if (!wardMemberData) {
+        logger.error('User not the member of this ward')
+        throw throwCustomError(ErrorDescription.WARD_ACCESS_DENIED, StatusCode.FORBIDDEN_403)
+    }
+
     const result = {
         wardName: wardData.wardName,
         hospitalName: hospitalData.name,
         createdBy: `${wardOwner.firstName} ${wardOwner.lastName}`,
         joinCode: wardData.joinCode,
+        userRole: wardMemberData.role,
     }
 
     return result

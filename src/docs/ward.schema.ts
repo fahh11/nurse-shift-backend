@@ -1,4 +1,5 @@
 import { WardStatus } from '@service/enums/wardStatus';
+import { WardMemberRole } from '@service/generated/prisma/enums';
 
 const tags = ['Ward'];
 
@@ -122,6 +123,7 @@ export const getWardByIdSchema = {
                 hospitalName: { type: 'string' },
                 createdBy: { type: 'string' },
                 joinCode: { type: 'string' },
+                userRole: { type: 'string', enum: Object.values(WardMemberRole) },
             },
         },
     },
