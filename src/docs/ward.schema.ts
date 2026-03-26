@@ -1,5 +1,5 @@
 import { WardStatus } from '@service/enums/wardStatus';
-import { WardMemberRole } from '@service/generated/prisma/enums';
+import { WardMemberRole } from '@service/enums/wardMemberRole';
 
 const tags = ['Ward'];
 

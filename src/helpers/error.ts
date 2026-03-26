@@ -53,6 +53,27 @@ export const ErrorDescription = {
         message: 'Shift template time overlaps with existing shift',
     },
 
+    // Shift Assignment Errors
+    SHIFT_TEMPLATE_REQUIRED: {
+        code: 'SHIFT_TEMPLATE_REQUIRED',
+        message: 'Shift template id is required',
+    },
+
+    INVALID_SHIFT_TEMPLATE_USAGE: {
+        code: 'INVALID_SHIFT_TEMPLATE_USAGE',
+        message: 'Invalid shift template usage',
+    },
+    
+    CONFLICTING_ASSIGNMENT_EXISTS: {
+        code: 'CONFLICTING_ASSIGNMENT_EXISTS',
+        message: 'A conflicting shift assignment already exists'
+    },
+
+    DAY_ALREADY_HAS_ASSIGNMENT: {
+        code: 'DAY_ALREADY_HAS_ASSIGNMENT',
+        message: 'This user already has an assignment on the selected date.'
+    },
+
     // Not Found Errors
     HOSPITAL_NOT_FOUND: {
         code: 'HOSPITAL_NOT_FOUND',

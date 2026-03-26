@@ -2,11 +2,10 @@ import { PrismaClient } from "@prisma/client";
 
 export default async function seedUser(
     prisma: PrismaClient,
-    hospitalId: string
 ) {
     try {
          // เอา hospital มาก่อน (ต้องมีอยู่แล้ว)
-        const hospital = await prisma.hospital.findUnique({ where: { hospital_id: hospitalId } })
+        const hospital = await prisma.hospital.findFirst({ where: { name: "Hospital A"} })
 
         await prisma.user.createMany({
             data: [
