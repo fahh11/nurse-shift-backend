@@ -121,6 +121,7 @@ export const getWardByIdSchema = {
                 wardName: { type: 'string' },
                 hospitalName: { type: 'string' },
                 createdBy: { type: 'string' },
+                joinCode: { type: 'string' },
             },
         },
     },

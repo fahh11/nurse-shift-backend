@@ -126,7 +126,7 @@ model shift_requirement {
 
 model shift_assignment {
   shift_assignment_id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  shift_template_id           String            @db.Uuid
+  shift_template_id           String?            @db.Uuid
   user_id                     String            @db.Uuid
   date                        DateTime          @db.Date
   assignment_type             ShiftAssignmentType
@@ -139,7 +139,7 @@ model shift_assignment {
   shiftAssignmentOfRequesters   shift_swap_request[]  @relation("shiftAssignOfRequesters")
   shiftAssignmentOfApprovers    shift_swap_request[]  @relation("shiftAssignOfApprovers")
 
-  shiftTemplate                 shift_template        @relation(fields: [shift_template_id], references: [shift_template_id])
+  shiftTemplate                 shift_template?        @relation(fields: [shift_template_id], references: [shift_template_id])
   user                          user                  @relation(fields: [user_id], references: [user_id])
 
   @@schema("nurse_shift_db")

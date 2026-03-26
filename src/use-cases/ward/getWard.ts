@@ -118,7 +118,8 @@ export const getWardById = async (
     const result = {
         wardName: wardData.wardName,
         hospitalName: hospitalData.name,
-        createdBy: `${wardOwner.firstName} ${wardOwner.lastName}`
+        createdBy: `${wardOwner.firstName} ${wardOwner.lastName}`,
+        joinCode: wardData.joinCode,
     }
 
     return result

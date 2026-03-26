@@ -46,8 +46,8 @@ export class ShiftRequirement {
         effectiveTo?: Date | null;
     }) {
         if (data.effectiveTo !== undefined) {
-        this.validateEffectiveDates(this.effectiveFrom, data.effectiveTo);
-        this.effectiveTo = data.effectiveTo;
+            this.validateEffectiveDates(this.effectiveFrom, data.effectiveTo);
+            this.effectiveTo = data.effectiveTo;
         }
 
         this.updatedAt = new Date();
