@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client'
 import seedHospital from './seedHospital'
 import seedWard from './seedWard'
 import seedUser from './seedUser'
+import seedShiftTemplate from './seedShiftTemplate'
+import seedShiftRequirement from './seedShiftRequirement'
 
 const prisma = new PrismaClient()
 
@@ -24,9 +26,11 @@ async function main() {
 
     await clearDatabase(prisma)
 
-    const hospitals = await seedHospital(prisma)
-    const users = await seedUser(prisma, hospitals[0].hospital_id)
-    const wards = await seedWard(prisma, hospitals[0].hospital_id, users[0].user_id)
+    await seedHospital(prisma)
+    await seedUser(prisma)
+    await seedWard(prisma)
+    await seedShiftTemplate(prisma)
+    await seedShiftRequirement(prisma)
 
     console.log('✅ Seeding completed successfully!')
   } catch (error) {

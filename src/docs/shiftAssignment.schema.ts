@@ -7,17 +7,20 @@ export const createShiftAssignmentSchema = {
     tags,
     params: {
         type: 'object',
-        required: [],
+        required: ['wardId'],
         properties: {
-            shiftTemplateId: { type: 'string' },
+            wardId: { type: 'string' },
         },
     },
     body: {
         type: 'object',
-        required: ['date', 'assignmentType'],
+        required: ['userId', 'date', 'assignmentType'],
         properties: {
+            userId: { type: 'string' },
             date: { type: 'string', format: 'date-time' },
             assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
+            shiftTemplateId: { type: 'string' },
+
         },
     },
     response: {
@@ -25,10 +28,13 @@ export const createShiftAssignmentSchema = {
             type: 'object',
             properties: {
                 shiftAssignmentId: { type: 'string' },
-                shiftTemplateId:  { type: 'string' },
+                shiftTemplateId:  { type: ['string', 'null'], nullable: true },
+                wardId: { type: 'string' },
                 userId: { type: 'string' },
                 date: { type: 'string', format: 'date-time' },
                 assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
+                createdBy: { type: 'string' },
+                updatedBy: { type: 'string' },
                 createdAt: { type: 'string', format: 'date-time' },
                 updatedAt: { type: 'string', format: 'date-time' },
             },
@@ -58,10 +64,13 @@ export const updateShiftAssignmentSchema = {
             type: 'object',
             properties: {
                 shiftAssignmentId: { type: 'string' },
-                shiftTemplateId:  { type: 'string' },
+                shiftTemplateId:  { type: ['string', 'null'], nullable: true },
+                wardId: { type: 'string' },
                 userId: { type: 'string' },
                 date: { type: 'string', format: 'date-time' },
                 assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
+                createdBy: { type: 'string' },
+                updatedBy: { type: 'string' },
                 createdAt: { type: 'string', format: 'date-time' },
                 updatedAt: { type: 'string', format: 'date-time' },
             },

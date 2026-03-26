@@ -24,12 +24,14 @@ model user {
   updated_at              DateTime          @updatedAt @db.Timestamp(6)
 
   // Relations
-  wardCreatedBy         ward[]                @relation("wardCreatedBy")
-  wardUpdatedBy         ward[]                @relation("wardUpdatedBy")
-  wardMember            ward_member[]
-  shiftAssignments      shift_assignment[]
-  shiftSwapRequesters   shift_swap_request[]  @relation("shiftSwapRequesters")
-  shiftSwapApprovers    shift_swap_request[]  @relation("shiftSwapApprovers")
+  wardCreatedBy             ward[]                @relation("wardCreatedBy")
+  wardUpdatedBy             ward[]                @relation("wardUpdatedBy")
+  wardMember                ward_member[]
+  shiftAssignments          shift_assignment[]
+  shiftAssignmentCreatedBy  shift_assignment[]    @relation("shiftAssignmentCreatedBy")
+  shiftAssignmentUpdatedBy  shift_assignment[]    @relation("shiftAssignmentUpdatedBy")
+  shiftSwapRequesters       shift_swap_request[]  @relation("shiftSwapRequesters")
+  shiftSwapApprovers        shift_swap_request[]  @relation("shiftSwapApprovers")
 
   hospital        hospital?          @relation(fields: [hospital_id], references: [hospital_id])
 
@@ -65,6 +67,7 @@ model ward {
   // Relations
   wardMembers         ward_member[]
   shiftTemplates      shift_template[]
+  shiftAssignments    shift_assignment[]
 
   createdBy           user              @relation("wardCreatedBy", fields: [created_by], references: [user_id])
   updatedBy           user              @relation("wardUpdatedBy", fields: [updated_by], references: [user_id])
@@ -126,21 +129,27 @@ model shift_requirement {
 
 model shift_assignment {
   shift_assignment_id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  shift_template_id           String?            @db.Uuid
+  shift_template_id           String?           @db.Uuid
+  ward_id                     String            @db.Uuid
   user_id                     String            @db.Uuid
   date                        DateTime          @db.Date
   assignment_type             ShiftAssignmentType
+  created_by                  String            @db.Uuid
+  updated_by                  String            @db.Uuid
   created_at                  DateTime          @default(now()) @db.Timestamp(6)
   updated_at                  DateTime          @updatedAt @db.Timestamp(6)
 
-  @@unique([user_id, date])
+  @@unique([user_id, date, shift_template_id])
 
   // Relations
   shiftAssignmentOfRequesters   shift_swap_request[]  @relation("shiftAssignOfRequesters")
   shiftAssignmentOfApprovers    shift_swap_request[]  @relation("shiftAssignOfApprovers")
 
   shiftTemplate                 shift_template?        @relation(fields: [shift_template_id], references: [shift_template_id])
-  user                          user                  @relation(fields: [user_id], references: [user_id])
+  ward                          ward                   @relation(fields: [ward_id], references: [ward_id])
+  user                          user                   @relation(fields: [user_id], references: [user_id])
+  createdBy                     user                   @relation("shiftAssignmentCreatedBy", fields: [created_by], references: [user_id])
+  updatedBy                     user                   @relation("shiftAssignmentUpdatedBy", fields: [updated_by], references: [user_id])
 
   @@schema("nurse_shift_db")
 }
@@ -191,6 +200,7 @@ enum ShiftTemplateType {
 
 enum ShiftAssignmentType {
   shift
+  emergency
   off
   leave
 
