@@ -7,7 +7,7 @@ export const createShiftAssignmentSchema = {
     tags,
     params: {
         type: 'object',
-        required: ['shiftTemplateId'],
+        required: [],
         properties: {
             shiftTemplateId: { type: 'string' },
         },
@@ -16,8 +16,7 @@ export const createShiftAssignmentSchema = {
         type: 'object',
         required: ['date', 'assignmentType'],
         properties: {
-            // user
-            // date: { type: 'string', format: 'date-time' },
+            date: { type: 'string', format: 'date-time' },
             assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
         },
     },

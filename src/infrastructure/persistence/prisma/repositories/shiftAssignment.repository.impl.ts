@@ -9,7 +9,7 @@ export class PrismaShiftAssignmentRepository implements ShiftAssignmentRepositor
     async create(shiftAssignment: ShiftAssignment): Promise<ShiftAssignment> {
         const created = await prisma.shift_assignment.create({
             data: {
-                shift_template_id: shiftAssignment.shiftTemplateId,
+                shift_template_id: shiftAssignment.shiftTemplateId ?? null,
                 user_id: shiftAssignment.userId,
                 date: shiftAssignment.date,
                 assignment_type: shiftAssignment.assignmentType,
