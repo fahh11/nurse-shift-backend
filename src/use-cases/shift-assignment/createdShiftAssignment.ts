@@ -9,7 +9,7 @@ import { ShiftTemplateRepository } from '@service/domain/repositories/shiftTempl
 import { UserRepository } from '@service/domain/repositories/user.repository'
 import { WardRepository } from '@service/domain/repositories/ward.repository'
 import { WardMemberRepository } from '@service/domain/repositories/wardMember.repository'
-import { ShiftAssignmentType } from '@service/generated/prisma/enums'
+import { ShiftAssignmentType } from '@service/enums/shiftAssignmentType'
 
 
 export const createShiftAssignment = async(
@@ -43,13 +43,13 @@ export const createShiftAssignment = async(
     }
 
     // หาก shift assignment เป็น shift ต้องมี shift template id
-    if (input.assignmentType ===  ShiftAssignmentType.shift && !input.shiftTemplateId) {
+    if (input.assignmentType ===  ShiftAssignmentType.SHIFT && !input.shiftTemplateId) {
         throw throwCustomError(
             ErrorDescription.SHIFT_TEMPLATE_REQUIRED,
             StatusCode.BAD_REQUEST_400
         )
     }
-    if (input.assignmentType !== ShiftAssignmentType.shift && input.shiftTemplateId) {
+    if (input.assignmentType !== ShiftAssignmentType.SHIFT && input.shiftTemplateId) {
         throw throwCustomError(
             ErrorDescription.INVALID_SHIFT_TEMPLATE_USAGE,
             StatusCode.BAD_REQUEST_400
@@ -88,12 +88,12 @@ export const createShiftAssignment = async(
 
     // หากในวันนั้น มีการ leave, off, emergency จะลงอย่างอีนไม่ได้อีก
     const existingAssignments = await repos.shiftAssignmentRepo.findByUserIdAndDate(assignedUserData.userId, normalizeDate)
-    const hasSpecialAssignment = existingAssignments.some(a => a.assignmentType !== ShiftAssignmentType.shift)
+    const hasSpecialAssignment = existingAssignments.some(a => a.assignmentType !== ShiftAssignmentType.SHIFT)
 
     const hasAnyAssignment = existingAssignments.length > 0
 
     // ถ้ากำลังจะลง SHIFT
-    if (input.assignmentType === ShiftAssignmentType.shift) {
+    if (input.assignmentType === ShiftAssignmentType.SHIFT) {
         // แต่วันนั้นมี off/leave/emergency แล้ว
         if (hasSpecialAssignment) {
             throw throwCustomError(
