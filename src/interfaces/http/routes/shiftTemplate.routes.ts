@@ -4,7 +4,7 @@ import { CreateShiftTemplateBody, UpdateShiftTemplateBody } from '@service/types
 import { createShiftTemplateSchema, updateShiftTemplateSchema, getAllShiftTemplateInWardSchema } from '@service/docs/shiftTemplate.schema';
 
 export default async function shiftTemplateRoutes(app: FastifyInstance) {
-    app.post<{Body: CreateShiftTemplateBody}>(
+    app.post<{Body: CreateShiftTemplateBody[]}>(
         '/create',
         {
             attachValidation: true,
@@ -27,7 +27,6 @@ export default async function shiftTemplateRoutes(app: FastifyInstance) {
     app.get(
         '/getAllShiftTemplateInWard/:wardId',
         {
-            attachValidation: true,
             schema: getAllShiftTemplateInWardSchema,
             preHandler: [app.authenticate, app.requireCompletedProfile] 
         },

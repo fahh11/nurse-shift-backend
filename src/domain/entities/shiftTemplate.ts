@@ -41,13 +41,6 @@ export class ShiftTemplate {
         if (!timeRegex.test(endTime)) {
             throw new Error('Invalid endTime format. Expected HH:mm');
         }
-
-        const startMinutes = toMinutes(startTime);
-        const endMinutes = toMinutes(endTime);
-
-        if (endMinutes <= startMinutes) {
-            throw new Error('endTime must be after startTime');
-        }
     }
 
     update(data: {

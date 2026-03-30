@@ -78,6 +78,34 @@ export class PrismaShiftAssignmentRepository implements ShiftAssignmentRepositor
         )
     }
 
+    async findByWardIdAndMonth(wardId: string, month: number, year: number): Promise<ShiftAssignment[]> {
+        const shiftAssignments = await prisma.shift_assignment.findMany({ 
+            where: {
+                ward_id: wardId,
+                date: {
+                    gte: new Date(year, month - 1, 1),
+                    lt: new Date(year, month, 1),
+                }
+            }
+        })
+
+        return shiftAssignments.map(
+            (shiftAssignment) =>
+                new ShiftAssignment({
+                    shiftAssignmentId: shiftAssignment.shift_assignment_id,
+                    shiftTemplateId: shiftAssignment.shift_template_id,
+                    wardId: shiftAssignment.ward_id,
+                    userId: shiftAssignment.user_id,
+                    date: shiftAssignment.date,
+                    assignmentType: shiftAssignment.assignment_type as ShiftAssignmentType,
+                    createdBy: shiftAssignment.created_by,
+                    updatedBy: shiftAssignment.updated_by,
+                    createdAt: shiftAssignment.created_at,
+                    updatedAt: shiftAssignment.updated_at,
+                })
+        )
+    }
+
     async findAll(): Promise<ShiftAssignment[]> {
         const shiftAssignments = await prisma.shift_assignment.findMany()
 
