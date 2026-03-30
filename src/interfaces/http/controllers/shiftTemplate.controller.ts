@@ -14,7 +14,7 @@ const wardRepo = new PrismaWardRepository()
 const shiftRequirementRepo = new PrismaShiftRequirementRepository()
 
 export const ShiftTemplateController = {
-    create: async (request: FastifyRequest<{Body: CreateShiftTemplateBody}>, reply: FastifyReply) => {
+    create: async (request: FastifyRequest<{Body: CreateShiftTemplateBody[]}>, reply: FastifyReply) => {
         const input = request.body
         const currentUser = request.user
 
@@ -22,7 +22,7 @@ export const ShiftTemplateController = {
             input,
             currentUser.userId,
             request.log,
-            {shiftTemplateRepo, userRepo, wardRepo}
+            {shiftTemplateRepo, shiftRequirementRepo, userRepo, wardRepo}
         );
         return reply.send(result);
     },
@@ -49,8 +49,15 @@ export const ShiftTemplateController = {
 
         const { wardId } = request.params as { wardId: string }
 
+        const { year, month } = request.query as {
+            year: number;
+            month: number;
+        };
+
         const result = await getAllShiftTemplateInWard(
             wardId,
+            year,
+            month,
             request.log,
             {shiftTemplateRepo, shiftRequirementRepo}
         );

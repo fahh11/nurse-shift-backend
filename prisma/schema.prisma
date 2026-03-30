@@ -119,8 +119,6 @@ model shift_requirement {
   created_at                  DateTime          @default(now()) @db.Timestamp(6)
   updated_at                  DateTime          @updatedAt @db.Timestamp(6)
 
-  @@unique([shift_template_id, effective_from])
-
   // Relations
   shiftTemplate              shift_template    @relation(fields: [shift_template_id], references: [shift_template_id])
 

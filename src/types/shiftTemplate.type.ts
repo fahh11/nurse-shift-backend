@@ -5,6 +5,7 @@ export interface CreateShiftTemplateBody {
     type: ShiftTemplateType
     startTime: string
     endTime: string
+    requiredPeople: number
 }
 
 export interface UpdateShiftTemplateBody {

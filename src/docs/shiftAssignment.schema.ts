@@ -14,30 +14,50 @@ export const createShiftAssignmentSchema = {
     },
     body: {
         type: 'object',
-        required: ['userId', 'date', 'assignmentType'],
-        properties: {
-            userId: { type: 'string' },
-            date: { type: 'string', format: 'date-time' },
-            assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
-            shiftTemplateId: { type: 'string' },
+        required: ['year', 'month', 'assignments'],
+            properties: {
+            year: {
+                type: 'number'
+            },
+            month: {
+                type: 'number',
+                minimum: 1,
+                maximum: 12,
+            },
+            assignments: {
+                type: 'array',
+                items: {
+                    type: 'object',
+                    required: ['userId', 'date', 'assignmentType'],
+                    properties: {
+                        userId: { type: 'string' },
+                        date: { type: 'string', format: 'date-time' },
+                        assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
+                        shiftTemplateId: { type: 'string' },
 
+                    },
+                }
+            }
         },
     },
     response: {
         200: {
-            type: 'object',
-            properties: {
-                shiftAssignmentId: { type: 'string' },
-                shiftTemplateId:  { type: ['string', 'null'], nullable: true },
-                wardId: { type: 'string' },
-                userId: { type: 'string' },
-                date: { type: 'string', format: 'date-time' },
-                assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
-                createdBy: { type: 'string' },
-                updatedBy: { type: 'string' },
-                createdAt: { type: 'string', format: 'date-time' },
-                updatedAt: { type: 'string', format: 'date-time' },
-            },
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    shiftAssignmentId: { type: 'string' },
+                    shiftTemplateId:  { type: ['string', 'null'], nullable: true },
+                    wardId: { type: 'string' },
+                    userId: { type: 'string' },
+                    date: { type: 'string', format: 'date-time' },
+                    assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
+                    createdBy: { type: 'string' },
+                    updatedBy: { type: 'string' },
+                    createdAt: { type: 'string', format: 'date-time' },
+                    updatedAt: { type: 'string', format: 'date-time' },
+                },
+            }
         },
     },
 };

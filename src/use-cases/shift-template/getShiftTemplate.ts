@@ -6,12 +6,19 @@ import { ShiftRequirementRepository } from '@service/domain/repositories/shiftRe
 
 export const getAllShiftTemplateInWard = async (
     wardId: string,
+    year: number,
+    month: number,
     logger: FastifyInstance['log'],
     repos: {
         shiftTemplateRepo: ShiftTemplateRepository
         shiftRequirementRepo: ShiftRequirementRepository
     }
 ) => {
+
+    console.log("===========")
+    console.log(year, month)
+    console.log("===========")
+
     // หา shift_template ทั้งหมดใน ward นี้
     const allShiftTemplateRecords = await repos.shiftTemplateRepo.findByWardId(wardId)
 
