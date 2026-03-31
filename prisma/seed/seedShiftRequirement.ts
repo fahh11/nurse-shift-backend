@@ -107,7 +107,7 @@ export default async function seedShiftRequirement(
         console.log("✅ Seeding shift requirements completed.");
         
     } catch (error) {
-        console.error("❌ Seeding wards failed:", error);
+        console.error("❌ Seeding shift requirements failed:", error);
         throw error;
     }
 }

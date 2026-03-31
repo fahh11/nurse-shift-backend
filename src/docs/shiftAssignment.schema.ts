@@ -99,40 +99,53 @@ export const updateShiftAssignmentSchema = {
 };
 
 export const summaryMonthShiftAssignmentSchema = {
-  description: 'Get shift assignments summary by month',
-  tags,
-  body: {
-    type: 'object',
-    required: ['month', 'year'],
-    properties: {
-        month: { type: 'number' },
-        year: { type: 'number' },
-    },
-  },
-  response: {
-    200: {
-      type: 'array',
-      items: {
+    description: 'Get shift assignments summary by month',
+    tags,
+    params: {
         type: 'object',
+        required: ['wardId'],
         properties: {
-          userId: { type: 'string' },
-          userName: { type: 'string' },
-          assignments: {
+            wardId: { type: 'string' },
+        },
+    },
+
+    querystring: {
+        type: 'object',
+        required: ['year', 'month'],
+        properties: {
+            year: { type: 'integer' },
+            month: {
+                type: 'integer',
+                minimum: 1,
+                maximum: 12,
+            },
+        },
+        additionalProperties: false,
+    },
+    response: {
+        200: {
             type: 'array',
             items: {
-              type: 'object',
-              properties: {
-                shiftTemplateType: { type: 'string' }, 
-                date: { type: 'string', format: 'date' },
-                assignmentType: {
-                  type: 'string',
-                  enum: Object.values(ShiftAssignmentType),
+                type: 'object',
+                properties: {
+                    userId: { type: 'string' },
+                    name: { type: 'string' },
+                    assignments: {
+                        type: 'array',
+                        items: {
+                            type: 'object',
+                            properties: {
+                                shiftTemplateType: { type: ['string', 'null'], nullable: true }, 
+                                date: { type: 'string', format: 'date' },
+                                assignmentType: {
+                                    type: 'string',
+                                    enum: Object.values(ShiftAssignmentType),
+                                },
+                            },
+                        },
+                    },
                 },
-              },
             },
-          },
         },
-      },
     },
-  },
 };

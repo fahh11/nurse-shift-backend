@@ -65,7 +65,7 @@ export default async function seedShiftTemplate(
         console.log("✅ Seeding shift templates completed.");
         
     } catch (error) {
-        console.error("❌ Seeding wards failed:", error);
+        console.error("❌ Seeding shift templates failed:", error);
         throw error;
     }
 }
