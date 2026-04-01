@@ -35,7 +35,7 @@ export const getAllShiftTemplateInWard = async (
                 )
             }
             return {
-                shitfTemplateId: record.shiftTemplateId,
+                shiftTemplateId: record.shiftTemplateId,
                 wardId: record.wardId,
                 type: record.type,
                 startTime: record.startTime,
