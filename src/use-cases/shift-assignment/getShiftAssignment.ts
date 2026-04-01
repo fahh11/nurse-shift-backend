@@ -4,6 +4,8 @@ import { StatusCode } from '@service/enums/statusCode'
 import { ShiftAssignmentRepository } from '@service/domain/repositories/shiftAssignment.repository'
 import { ShiftTemplateRepository } from '@service/domain/repositories/shiftTemplate.repository'
 import { UserRepository } from '@service/domain/repositories/user.repository'
+import { WardMemberRepository } from '@service/domain/repositories/wardMember.repository'
+import { WardMemberRole } from '@service/enums/wardMemberRole'
 
 export const getSummaryMonthShiftAssignment = async (
     wardId: string,
@@ -14,8 +16,19 @@ export const getSummaryMonthShiftAssignment = async (
         shiftAssignmentRepo: ShiftAssignmentRepository
         shiftTemplateRepo: ShiftTemplateRepository
         userRepo: UserRepository
+        wardMemberRepo: WardMemberRepository
     }
 ) => {
+    // หา member ทั้งหมดของ ward นี้
+    const allMembers = await repos.wardMemberRepo.findByWardId(wardId)
+    if (!allMembers) {
+        logger.error('Ward member not found')
+        throw throwCustomError(
+            ErrorDescription.WARD_MEMBER_NOT_FOUND,
+            StatusCode.NOT_FOUND_404
+        )
+    }
+
     // หา shift assignment ทั้งหมดของ ward ตามช่วงเวลา
     const allShiftAssignmentRecords = await repos.shiftAssignmentRepo.findByWardIdAndMonth(wardId, month, year)
 
@@ -32,15 +45,29 @@ export const getSummaryMonthShiftAssignment = async (
         }
     >()
 
-
-    for (const record of allShiftAssignmentRecords) {
-        const userId = record.userId
-
-        const userData = await repos.userRepo.findById(userId)
+    // นำ member เข้า map
+    for (const member of allMembers) {
+        const userData = await repos.userRepo.findById(member.userId)
         if (!userData) {
             logger.error('User not found')
             throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)
         }
+
+        if (member.role !== WardMemberRole.HEAD_NURSE && !mapShiftAssignments.has(member.userId)) {
+            mapShiftAssignments.set(member.userId,
+                {
+                    userId: userData.userId,
+                    name: `${userData.firstName ?? ''} ${userData.lastName ?? ''}`,
+                    assignments: []
+                }
+             )
+        }
+    }
+
+    // เอา assignment เข้า map
+    for (const record of allShiftAssignmentRecords) {
+        const memberOfGroup = mapShiftAssignments.get(record.userId)
+        if (!memberOfGroup) continue
 
         let shiftTemplateData = null
 
@@ -56,19 +83,8 @@ export const getSummaryMonthShiftAssignment = async (
             }
         }
 
-        // ถ้ายังไม่มี user นี้ → create group ใหม่
-        if (!mapShiftAssignments.has(record.userId)) {
-            mapShiftAssignments.set(userId,
-                {
-                    userId: userData.userId,
-                    name: `${userData.firstName ?? ''} ${userData.lastName ?? ''}`,
-                    assignments: []
-                }
-            )
-        }
-
         // push assignment เข้าไป
-        mapShiftAssignments.get(userId)!.assignments.push({
+        mapShiftAssignments.get(record.userId)!.assignments.push({
             shiftTemplateType: shiftTemplateData ? shiftTemplateData.type : null,
             date: record.date.toISOString().split('T')[0],
             assignmentType: record.assignmentType,

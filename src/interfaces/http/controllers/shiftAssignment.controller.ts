@@ -41,7 +41,7 @@ export const ShiftAssignmentController = {
             year,
             month,
             request.log,
-            {shiftAssignmentRepo, shiftTemplateRepo, userRepo}
+            {shiftAssignmentRepo, shiftTemplateRepo, userRepo, wardMemberRepo}
         );
         return reply.send(result);
     },

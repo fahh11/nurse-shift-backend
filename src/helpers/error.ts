@@ -87,6 +87,10 @@ export const ErrorDescription = {
         code: 'WARD_NOT_FOUND',
         message: 'Ward not found.',
     },
+    WARD_MEMBER_NOT_FOUND: {
+        code: 'WARD_MEMBER_NOT_FOUND',
+        message: 'Ward member not found.',
+    },
     SHIFT_TEMPLATE_NOT_FOUND: {
         code: 'SHIFT_TEMPLATE_NOT_FOUND',
         message: 'Shift template not found.',
