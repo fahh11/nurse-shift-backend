@@ -9,6 +9,7 @@ import { PrismaWardRepository } from '@service/infrastructure/persistence/prisma
 import { PrismaWardMemberRepository } from '@service/infrastructure/persistence/prisma/repositories/wardMember.repository.impl';
 
 
+
 const shiftAssignmentRepo = new PrismaShiftAssignmentRepository()
 const shiftTemplateRepo = new PrismaShiftTemplateRepository()
 const userRepo = new PrismaUserRepository()
