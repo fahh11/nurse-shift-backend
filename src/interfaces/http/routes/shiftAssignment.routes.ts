@@ -5,7 +5,7 @@ import { createShiftAssignmentSchema } from '@service/docs/shiftAssignment.schem
 import { summaryMonthShiftAssignmentSchema } from '@service/docs/shiftAssignment.schema';
 
 export default async function shiftAssignmentRoutes(app: FastifyInstance) {
-    app.post<{Body: CreateShiftAssignmentBody}>(
+    app.post<{Body: CreateShiftAssignmentBody[]}>(
         '/create/:wardId',
         {
             attachValidation: true,

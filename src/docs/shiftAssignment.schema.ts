@@ -12,33 +12,34 @@ export const createShiftAssignmentSchema = {
             wardId: { type: 'string' },
         },
     },
-    body: {
+
+    querystring: {
         type: 'object',
-        required: ['year', 'month', 'assignments'],
-            properties: {
-            year: {
-                type: 'number'
-            },
+        required: ['year', 'month'],
+        properties: {
+            year: { type: 'integer' },
             month: {
-                type: 'number',
+                type: 'integer',
                 minimum: 1,
                 maximum: 12,
             },
-            assignments: {
-                type: 'array',
-                items: {
-                    type: 'object',
-                    required: ['userId', 'date', 'assignmentType'],
-                    properties: {
-                        userId: { type: 'string' },
-                        date: { type: 'string', format: 'date-time' },
-                        assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
-                        shiftTemplateId: { type: 'string' },
-
-                    },
-                }
-            }
         },
+        additionalProperties: false,
+    },
+
+    body: {
+        type: 'array',
+        items: {
+            type: 'object',
+            required: ['userId', 'date', 'assignmentType'],
+            properties: {
+                userId: { type: 'string' },
+                date: { type: 'string', format: 'date-time' },
+                assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
+                shiftTemplateId: { type: 'string' },
+
+            },
+        }
     },
     response: {
         200: {
@@ -135,6 +136,7 @@ export const summaryMonthShiftAssignmentSchema = {
                         items: {
                             type: 'object',
                             properties: {
+                                shiftAssignmentId: { type: 'string' },
                                 shiftTemplateType: { type: ['string', 'null'], nullable: true }, 
                                 date: { type: 'string', format: 'date' },
                                 assignmentType: {

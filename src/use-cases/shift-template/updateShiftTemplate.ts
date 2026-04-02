@@ -7,7 +7,7 @@ import { UserRepository } from '@service/domain/repositories/user.repository'
 import { WardRepository } from '@service/domain/repositories/ward.repository'
 import { UpdateShiftTemplateBody } from '@service/types/shiftTemplate.type'
 import { UpdateShiftTemplateOutputDto } from '@service/interfaces/dto/shift-template/shiftTemplate.output'
-import { toMinutes } from '@service/helpers/shiftTemplate'
+import { toMinutes } from '@service/helpers/timeHelper'
 
 export const updateShiftTemplate = async(
     input: UpdateShiftTemplateBody,

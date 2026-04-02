@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from 'uuid';
 import { ShiftTemplateType } from '@service/enums/shiftTemplateType';
-import { toMinutes } from '@service/helpers/shiftTemplate';
+import { toMinutes } from '@service/helpers/timeHelper';
 
 export class ShiftTemplate {
     public readonly shiftTemplateId: string;

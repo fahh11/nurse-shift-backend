@@ -38,6 +38,7 @@ export const getSummaryMonthShiftAssignment = async (
             userId: string
             name: string
             assignments: {
+                shiftAssignmentId: string | null
                 shiftTemplateType: string | null
                 date: string
                 assignmentType: string
@@ -85,6 +86,7 @@ export const getSummaryMonthShiftAssignment = async (
 
         // push assignment เข้าไป
         mapShiftAssignments.get(record.userId)!.assignments.push({
+            shiftAssignmentId: record.shiftAssignmentId,
             shiftTemplateType: shiftTemplateData ? shiftTemplateData.type : null,
             date: record.date.toISOString().split('T')[0],
             assignmentType: record.assignmentType,
