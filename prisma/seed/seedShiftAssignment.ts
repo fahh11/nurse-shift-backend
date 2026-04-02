@@ -57,7 +57,7 @@ export default async function seedShiftAssignment(
                     updated_by: admin!.user_id,
                 },
                 {
-                    shift_template_id: afternoonOfWard1A!.shift_template_id,
+                    shift_template_id: nightOfWard1A!.shift_template_id,
                     ward_id: ward1OfA!.ward_id,
                     user_id: user1!.user_id,
                     date: new Date("2026-01-01"),

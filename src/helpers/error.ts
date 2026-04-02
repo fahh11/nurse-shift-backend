@@ -73,6 +73,10 @@ export const ErrorDescription = {
         code: 'DAY_ALREADY_HAS_ASSIGNMENT',
         message: 'This user already has an assignment on the selected date.'
     },
+    EXCEED_MAX_CONTINUOUS_WORK_HOUR: {
+        code: 'EXCEED_MAX_CONTINUOUS_WORK_HOUR',
+        message: 'User exceeds 16 continuous working hours',
+    },
 
     // Not Found Errors
     HOSPITAL_NOT_FOUND: {
@@ -120,12 +124,14 @@ export type ErrorDetail = (typeof ErrorDescription)[ErrorCode]
 export class CustomError extends Error {
   statusCode: number
   errors?: ErrorDetail[]
+  details?: any
 
   constructor(message: string, statusCode: number, errors?: ErrorDetail[]) {
     super(message)
     this.name = 'CustomError'
     this.statusCode = statusCode
     this.errors = errors
+    this.details = this.details
   }
 }
 

@@ -15,7 +15,6 @@ export const validateDailyAssignment = (
 
     // ✅ กำลังเพิ่ม SHIFT
     if (incomingAssignmentType === ShiftAssignmentType.SHIFT) {
-
         // มี OFF / LEAVE / EMERGENCY อยู่แล้ว
         if (hasSpecialAssignment) {
             throw throwCustomError(
