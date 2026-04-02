@@ -126,15 +126,15 @@ export class CustomError extends Error {
   errors?: ErrorDetail[]
   details?: any
 
-  constructor(message: string, statusCode: number, errors?: ErrorDetail[]) {
+  constructor(message: string, statusCode: number, errors?: ErrorDetail[], details?: any) {
     super(message)
     this.name = 'CustomError'
     this.statusCode = statusCode
     this.errors = errors
-    this.details = this.details
+    this.details = details
   }
 }
 
-export const throwCustomError = (description: ErrorDetail, statusCode: number): never => {
-  throw new CustomError(description.message, statusCode, [description])
+export const throwCustomError = (description: ErrorDetail, statusCode: number, details?: any): never => {
+  throw new CustomError(description.message, statusCode, [description], details)
 }

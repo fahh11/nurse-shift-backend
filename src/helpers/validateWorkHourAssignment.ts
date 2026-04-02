@@ -103,8 +103,6 @@ export const validateWorkHourAssignment = (
             // คำนวณ gap ชั่วโมง
             let gapHours = 0
 
-            console.log(prev.date.getTime(), current.date.getTime())
-
             if (prev.date.getTime() === current.date.getTime()) {
                 // ลง shift ประเภทเดียวกัน (morning, afternoon, night) ในวันเดียวกัน error
                 if (prev.type === current.type) {
@@ -138,15 +136,14 @@ export const validateWorkHourAssignment = (
         }
     }
 
+    console.log('exceedInfo', exceedInfo)
+
     if (exceedInfo.length > 0) {
         logger.error('Users exceed 16 continuous working hours')
         throw throwCustomError(
             ErrorDescription.EXCEED_MAX_CONTINUOUS_WORK_HOUR,
             StatusCode.BAD_REQUEST_400,
-            // exceedInfo.map(info => ({
-            //     userId: info.userId,
-            //     dates: info.dates.map(d => d.toISOString().split('T')[0])
-            // }))
+            exceedInfo
         )
     }
 }
