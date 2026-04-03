@@ -43,24 +43,34 @@ export const createShiftAssignmentSchema = {
     },
     response: {
         200: {
-            type: 'array',
-            items: {
-                type: 'object',
-                properties: {
-                    shiftAssignmentId: { type: 'string' },
-                    shiftTemplateId:  { type: ['string', 'null'], nullable: true },
-                    wardId: { type: 'string' },
-                    userId: { type: 'string' },
-                    date: { type: 'string', format: 'date-time' },
-                    assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
-                    createdBy: { type: 'string' },
-                    updatedBy: { type: 'string' },
-                    createdAt: { type: 'string', format: 'date-time' },
-                    updatedAt: { type: 'string', format: 'date-time' },
+            type: 'object',
+            properties: {
+                results: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            shiftAssignmentId: { type: 'string' },
+                            shiftTemplateId:  { type: ['string', 'null'], nullable: true },
+                            wardId: { type: 'string' },
+                            userId: { type: 'string' },
+                            date: { type: 'string', format: 'date-time' },
+                            assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
+                            createdBy: { type: 'string' },
+                            updatedBy: { type: 'string' },
+                            createdAt: { type: 'string', format: 'date-time' },
+                            updatedAt: { type: 'string', format: 'date-time' },
+                        }
+                    }
                 },
+                warning: { 
+                    type: 'array',
+                    items: { type: 'string' },
+                    nullable: true
+                }
             }
-        },
-    },
+        }
+    }
 };
 
 export const updateShiftAssignmentSchema = {

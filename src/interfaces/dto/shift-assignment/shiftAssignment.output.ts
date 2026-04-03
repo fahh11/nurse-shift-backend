@@ -1,5 +1,10 @@
 import { ShiftAssignmentType } from '@service/enums/shiftAssignmentType'
 
+export interface CreateShiftAssignmentResponse {
+    results: CreateShiftAssignmentOutputDto[]  
+    warnings: string[]
+}
+
 export interface CreateShiftAssignmentOutputDto {
     shiftAssignmentId: string
     shiftTemplateId: string | null

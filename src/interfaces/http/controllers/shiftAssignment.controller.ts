@@ -30,8 +30,8 @@ export const ShiftAssignmentController = {
             input,
             wardId,
             currentUser.userId,
-            year,
-            month,
+            Number(year),
+            Number(month),
             request.log,
             {shiftAssignmentRepo, shiftTemplateRepo, shiftRequirementRepo, userRepo, wardRepo, wardMemberRepo}
         );
