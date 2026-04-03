@@ -82,9 +82,10 @@ export const validateWorkHourAssignment = (
                         StatusCode.BAD_REQUEST_400
                     )
                 }
-                // วันเดัยวกันหา gap
-                gapHours = (current.start.getTime() - prev.end.getTime()) / (1000 * 60 * 60)
             }
+
+            // วันเหา gap
+            gapHours = (current.start.getTime() - prev.end.getTime()) / (1000 * 60 * 60)
 
             if (gapHours > 0) {
                 // มี gap → reset

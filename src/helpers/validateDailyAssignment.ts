@@ -4,14 +4,20 @@ import { ShiftAssignment } from '@service/domain/entities/shiftAssignment'
 import { ShiftAssignmentType } from '@service/enums/shiftAssignmentType'
 
 export const validateDailyAssignment = (
+    wardId: string,
     existingAssignments: ShiftAssignment[],
     incomingAssignmentType: ShiftAssignmentType
 ): void => {
-    const hasSpecialAssignment = existingAssignments.some(
+    // กรอง assignment type shift และอยู่ใน ward นี้
+    const wardAssignments = existingAssignments.filter(
+        a => a.wardId === wardId
+    )
+
+    const hasSpecialAssignment = wardAssignments.some(
         a => a.assignmentType !== ShiftAssignmentType.SHIFT
     )
 
-    const hasAnyAssignment = existingAssignments.length > 0
+    const hasAnyAssignment = wardAssignments.length > 0
 
     // ✅ กำลังเพิ่ม SHIFT
     if (incomingAssignmentType === ShiftAssignmentType.SHIFT) {

@@ -3,8 +3,9 @@ import { throwCustomError, ErrorDescription } from '@service/helpers/error'
 import { StatusCode } from '@service/enums/statusCode'
 import { ShiftAssignment } from '@service/domain/entities/shiftAssignment'
 import { CreateShiftAssignmentBody } from '@service/types/shiftAssignment.type'
-import { CreateShiftAssignmentOutputDto } from '@service/interfaces/dto/shift-assignment/shiftAssignment.output'
 import { ShiftAssignmentRepository } from '@service/domain/repositories/shiftAssignment.repository'
+import { CreateShiftAssignmentResponse } from '@service/interfaces/dto/shift-assignment/shiftAssignment.output'
+import { CreateShiftAssignmentOutputDto } from '@service/interfaces/dto/shift-assignment/shiftAssignment.output'
 import { ShiftTemplateRepository } from '@service/domain/repositories/shiftTemplate.repository'
 import { ShiftRequirementRepository } from '@service/domain/repositories/shiftRequirement.repository'
 import { UserRepository } from '@service/domain/repositories/user.repository'
@@ -31,7 +32,7 @@ export const createShiftAssignment = async(
         wardRepo: WardRepository
         wardMemberRepo: WardMemberRepository
     }
-): Promise<CreateShiftAssignmentOutputDto[]> => {
+): Promise<CreateShiftAssignmentResponse> => {
     // ======= Load once =======
 
     // หา user ปัจจุบันจาก id
@@ -70,7 +71,7 @@ export const createShiftAssignment = async(
         ...input.map(a => ({
             userId: a.userId,
             wardId: wardData.wardId,
-            date: new Date(`${a.date}T00:00:00.000Z`),
+            date: new Date(a.date),
             assignmentType: a.assignmentType,
             shiftTemplateId: a.shiftTemplateId
         }))
@@ -104,8 +105,11 @@ export const createShiftAssignment = async(
     }
 
     // ======= Validation =======
+    const warnings: string[] = []
     validateWorkHourAssignment(virtualMonthAssignments, virtualAllShiftTemplate, logger)
-    validateUserAssignmentCoverage(virtualMonthAssignments, month, year)
+    validateUserAssignmentCoverage(warnings, virtualMonthAssignments, month, year)
+
+    console.log(warnings)
 
     
 
@@ -114,7 +118,7 @@ export const createShiftAssignment = async(
 
     for (const assignment of input) {
         // normalize date
-        const normalizeDate = new Date(`${assignment.date}T00:00:00.000Z`)
+        const normalizeDate = new Date(assignment.date)
 
         // หา user ที่ถูก assign จาก id
         const assignedUserData = await repos.userRepo.findById(assignment.userId)
@@ -162,7 +166,7 @@ export const createShiftAssignment = async(
 
         // validateDailyAssignment -> หากในวันนั้น มีการ leave, off, emergency จะลงอย่างอีนไม่ได้อีก
         const existingAssignments = await repos.shiftAssignmentRepo.findByUserIdAndDate(assignedUserData.userId, normalizeDate)
-        validateDailyAssignment(existingAssignments, assignment.assignmentType)
+        validateDailyAssignment(wardData.wardId, existingAssignments, assignment.assignmentType)
 
         // create shift assignment 
         const newShiftAssignment = new ShiftAssignment({
@@ -180,5 +184,5 @@ export const createShiftAssignment = async(
         results.push(created)
     }
 
-    return results
+    return {results, warnings}
 }
