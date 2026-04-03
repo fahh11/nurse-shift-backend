@@ -13,6 +13,7 @@ import { WardMemberRepository } from '@service/domain/repositories/wardMember.re
 import { ShiftAssignmentType } from '@service/enums/shiftAssignmentType'
 import { validateDailyAssignment } from '@service/helpers/validateDailyAssignment'
 import { validateWorkHourAssignment } from '@service/helpers/validateWorkHourAssignment'
+import { validateUserAssignmentCoverage } from '@service/helpers/validateUserAssignmentCoverage'
 import { calculateDurationHours } from '@service/helpers/calculateDurationHours'
 
 export const createShiftAssignment = async(
@@ -102,7 +103,11 @@ export const createShiftAssignment = async(
         })
     }
 
+    // ======= Validation =======
     validateWorkHourAssignment(virtualMonthAssignments, virtualAllShiftTemplate, logger)
+    validateUserAssignmentCoverage(virtualMonthAssignments, month, year)
+
+    
 
     // ======= Process list =======
     const results: CreateShiftAssignmentOutputDto[] = []

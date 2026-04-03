@@ -11,3 +11,25 @@ export function combineDateTime(date: Date, time: string): Date {
 
     return result
 }
+
+export function buildShiftDateTime(
+    date: Date,
+    start: string,
+    end: string
+) {
+    const [sh, sm] = start.split(':').map(Number)
+    const [eh, em] = end.split(':').map(Number)
+
+    const startAt = new Date(date)
+    startAt.setHours(sh, sm, 0, 0)
+
+    const endAt = new Date(date)
+    endAt.setHours(eh, em, 0, 0)
+
+    // 🔥 cross midnight fix
+    if (endAt <= startAt) {
+        endAt.setDate(endAt.getDate() + 1)
+    }
+
+    return { startAt, endAt }
+}

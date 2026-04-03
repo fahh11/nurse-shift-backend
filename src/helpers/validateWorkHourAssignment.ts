@@ -1,42 +1,9 @@
 import { FastifyInstance } from 'fastify/types/instance'
 import { throwCustomError, ErrorDescription } from '@service/helpers/error'
 import { StatusCode } from '@service/enums/statusCode'
-import { ShiftTemplate } from '@service/domain/entities/shiftTemplate'
-import { ShiftAssignmentType } from '@service/enums/shiftAssignmentType'
 import { ShiftTemplateType } from '@service/enums/shiftTemplateType'
-import { combineDateTime } from '@service/helpers/timeHelper'
-import { calculateDurationHours } from '@service/helpers/calculateDurationHours'
-
-type VirtualMonthAssignment = {
-    userId: string
-    wardId: string
-    date: Date
-    assignmentType: ShiftAssignmentType
-    shiftTemplateId: string | null
-}
-
-type VirtualShiftTemplate = {
-    shiftTemplateId: string
-    wardId: string
-    type: string
-    startTime: string
-    endTime: string
-    requiredPeople: number
-    durationHours: number
-}
-
-type WorkingSlot = {
-    date: Date
-    start: string
-    end: string
-    durationHours: number
-    type: ShiftTemplateType
-}
-
-type ExceedWorkHourInfo = {
-    userId: string
-    dates: Date[]
-}
+import { VirtualMonthAssignment, VirtualShiftTemplate, ExceedWorkHourInfo, WorkingSlot } from '@service/types/validateAssignment.type'
+import { buildShiftDateTime } from '@service/helpers/timeHelper'
 
 export const validateWorkHourAssignment = (
     virtualMonthAssignments: VirtualMonthAssignment[],
@@ -64,10 +31,16 @@ export const validateWorkHourAssignment = (
             assignmentMap.set(assignment.userId, [])
         }
 
+        const { startAt, endAt } = buildShiftDateTime(
+            assignment.date,
+            template.startTime,
+            template.endTime
+        )
+
         assignmentMap.get(assignment.userId)!.push({
             date: assignment.date,
-            start: template.startTime,
-            end: template.endTime,
+            start: startAt,
+            end: endAt,
             durationHours: template.durationHours,
             type: template.type as ShiftTemplateType
         })
@@ -75,12 +48,10 @@ export const validateWorkHourAssignment = (
 
     const sortedAssignmentMap = new Map(
         Array.from(assignmentMap.entries()).map(([userId, slots]) => {
-            const sortedSlots = slots.sort((a, b) => {
-                const dateDiff = a.date.getTime() - b.date.getTime()
-                if (dateDiff !== 0) return dateDiff
+            const sortedSlots = slots.sort(
+                (a, b) => a.start.getTime() - b.start.getTime()
+            )
 
-                return a.start.localeCompare(b.start)
-            })
             return [userId, sortedSlots]
         })
     )
@@ -103,8 +74,6 @@ export const validateWorkHourAssignment = (
             // คำนวณ gap ชั่วโมง
             let gapHours = 0
 
-            console.log(prev.date.getTime(), current.date.getTime())
-
             if (prev.date.getTime() === current.date.getTime()) {
                 // ลง shift ประเภทเดียวกัน (morning, afternoon, night) ในวันเดียวกัน error
                 if (prev.type === current.type) {
@@ -114,7 +83,7 @@ export const validateWorkHourAssignment = (
                     )
                 }
                 // วันเดัยวกันหา gap
-                gapHours = calculateDurationHours(prev.end, current.start)
+                gapHours = (current.start.getTime() - prev.end.getTime()) / (1000 * 60 * 60)
             }
 
             if (gapHours > 0) {
@@ -143,10 +112,7 @@ export const validateWorkHourAssignment = (
         throw throwCustomError(
             ErrorDescription.EXCEED_MAX_CONTINUOUS_WORK_HOUR,
             StatusCode.BAD_REQUEST_400,
-            // exceedInfo.map(info => ({
-            //     userId: info.userId,
-            //     dates: info.dates.map(d => d.toISOString().split('T')[0])
-            // }))
+            exceedInfo
         )
     }
 }
