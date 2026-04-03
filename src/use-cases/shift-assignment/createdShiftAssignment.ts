@@ -107,6 +107,8 @@ export const createShiftAssignment = async(
     validateWorkHourAssignment(virtualMonthAssignments, virtualAllShiftTemplate, logger)
     validateUserAssignmentCoverage(virtualMonthAssignments, month, year)
 
+    
+
     // ======= Process list =======
     const results: CreateShiftAssignmentOutputDto[] = []
 
