@@ -15,6 +15,8 @@ import { ShiftAssignmentType } from '@service/enums/shiftAssignmentType'
 import { validateDailyAssignment } from '@service/helpers/validateDailyAssignment'
 import { validateWorkHourAssignment } from '@service/helpers/validateWorkHourAssignment'
 import { validateUserAssignmentCoverage } from '@service/helpers/validateUserAssignmentCoverage'
+import { validateEmergencyAssignment } from '@service/helpers/validateEmergencyAssignment'
+import { validateRequiredAssignment } from '@service/helpers/validateRequiredAssignment'
 import { calculateDurationHours } from '@service/helpers/calculateDurationHours'
 
 export const createShiftAssignment = async(
@@ -108,10 +110,10 @@ export const createShiftAssignment = async(
     const warnings: string[] = []
     validateWorkHourAssignment(virtualMonthAssignments, virtualAllShiftTemplate, logger)
     validateUserAssignmentCoverage(warnings, virtualMonthAssignments, month, year)
+    validateEmergencyAssignment(warnings, virtualMonthAssignments, month, year)
+    validateRequiredAssignment(warnings, virtualMonthAssignments, virtualAllShiftTemplate, month, year)
 
     console.log(warnings)
-
-    
 
     // ======= Process list =======
     const results: CreateShiftAssignmentOutputDto[] = []

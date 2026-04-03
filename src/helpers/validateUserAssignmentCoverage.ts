@@ -29,8 +29,6 @@ export const validateUserAssignmentCoverage = (
         userAssignmentMap.get(assignment.userId)!.add(date.getDate())
     }
 
-    console.log(userAssignmentMap)
-
     // check แต่ละ user ต้องมีอย่างน้อย 1 record ต่อวัน
     for (const [userId, assignnedDays] of userAssignmentMap.entries()) {
         const missingDays: number[] = []
