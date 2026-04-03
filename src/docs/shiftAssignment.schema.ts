@@ -161,3 +161,32 @@ export const summaryMonthShiftAssignmentSchema = {
         },
     },
 };
+
+export const deleteShiftAssignmentSchema = {
+    description: 'delete shift assignment record',
+    tags,
+    params: {
+        type: 'object',
+        required: ['shiftAssignmentId'],
+        properties: {
+            shiftAssignmentId: { type: 'string' },
+        },
+    },
+    response: {
+        200: {
+            type: 'object',
+            properties: {
+                shiftAssignmentId: { type: 'string' },
+                shiftTemplateId:  { type: ['string', 'null'], nullable: true },
+                wardId: { type: 'string' },
+                userId: { type: 'string' },
+                date: { type: 'string', format: 'date-time' },
+                assignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
+                createdBy: { type: 'string' },
+                updatedBy: { type: 'string' },
+                createdAt: { type: 'string', format: 'date-time' },
+                updatedAt: { type: 'string', format: 'date-time' },
+            },
+        },
+    },
+};

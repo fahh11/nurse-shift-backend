@@ -14,11 +14,6 @@ export const getAllShiftTemplateInWard = async (
         shiftRequirementRepo: ShiftRequirementRepository
     }
 ) => {
-
-    console.log("===========")
-    console.log(year, month)
-    console.log("===========")
-
     // หา shift_template ทั้งหมดใน ward นี้
     const allShiftTemplateRecords = await repos.shiftTemplateRepo.findByWardId(wardId)
 
