@@ -147,6 +147,18 @@ export class CustomError extends Error {
     this.errors = errors
     this.details = details
   }
+
+  //เพิ่ม toJSON method เพื่อให้สามารถส่งข้อมูล details ออกไปได้ด้วย
+    toJSON() {
+    return {
+      message: this.message,
+      statusCode: this.statusCode,
+      // ดึง code จากก้อน errors ถ้ามี
+      code: this.errors && this.errors.length > 0 ? this.errors[0].code : undefined,
+      errors: this.errors,
+      details: this.details // ไว้ส่ง exceedInfo ออกไป
+    }
+  }
 }
 
 export const throwCustomError = (description: ErrorDetail, statusCode: number, details?: any): never => {

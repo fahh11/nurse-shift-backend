@@ -53,6 +53,18 @@ export function buildApp() {
     }
   );
 
+  // 🚩 ดักจับ CustomError เพื่อให้ยอมส่ง field 'details' ออกไปหน้าบ้าน
+  app.setErrorHandler((error: any, request, reply) => {
+    if (error.statusCode && error.details) {
+      return reply.status(error.statusCode).send({
+        message: error.message,
+        statusCode: error.statusCode,
+        code: error.errors?.[0]?.code,
+        details: error.details // <--- ตัวแปรส่งให้หน้าบ้าน
+      });
+    }
+    return reply.send(error); // Error อื่นๆ ให้ Fastify จัดการตามปกติ
+  });
 
   // 🚦 Register routes
   registerRoutes(app);
