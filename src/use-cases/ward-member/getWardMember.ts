@@ -28,6 +28,7 @@ export const getAllWardMemberInWard = async(
             }
 
             return {
+                userId: member.userId,
                 firstName: member.firstName,
                 lastName: member.lastName,
             };

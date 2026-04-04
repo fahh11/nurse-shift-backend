@@ -48,6 +48,7 @@ export const getAllWardMemberInWardSchema = {
             items: {
                 type: 'object',
                 properties: {
+                    userId: { type: 'string' },
                     firstName: { type: 'string' },
                     lastName: { type: 'string' },
                 },
