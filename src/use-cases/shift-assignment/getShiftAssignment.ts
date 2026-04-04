@@ -56,7 +56,7 @@ export const getSummaryMonthShiftAssignment = async (
             throw throwCustomError(ErrorDescription.USER_NOT_FOUND, StatusCode.NOT_FOUND_404)
         }
 
-        if (member.role !== WardMemberRole.HEAD_NURSE && !mapShiftAssignments.has(member.userId)) {
+        if (!mapShiftAssignments.has(member.userId)) {
             mapShiftAssignments.set(member.userId,
                 {
                     userId: userData.userId,
