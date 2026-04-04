@@ -2,7 +2,7 @@ import { VirtualMonthAssignment } from '@service/types/validateAssignment.type'
 import { WarningType } from '@service/enums/warningType'
 
 export const validateUserAssignmentCoverage = (
-    warnings: string[],
+    warning: string[],
     allAssignments: VirtualMonthAssignment[],
     month: number,
     year: number
@@ -40,9 +40,10 @@ export const validateUserAssignmentCoverage = (
         }
 
         if (missingDays.length > 0) {
-            warnings.push(WarningType.USER_MISSING_ASSIGNMENT)
+            warning.push(WarningType.USER_MISSING_ASSIGNMENT)
+            break
         }
     }
 
-    return warnings
+    return warning
 }

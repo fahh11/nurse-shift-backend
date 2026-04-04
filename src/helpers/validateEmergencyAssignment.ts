@@ -3,7 +3,7 @@ import { VirtualMonthAssignment } from '@service/types/validateAssignment.type'
 import { ShiftAssignmentType } from '@service/enums/shiftAssignmentType'
 
 export const validateEmergencyAssignment = (
-    warnings: string[],
+    warning: string[],
     allAssignments: VirtualMonthAssignment[],
     month: number,
     year: number
@@ -40,8 +40,8 @@ export const validateEmergencyAssignment = (
     }
 
     if (!completeEmergency) {
-        warnings.push(WarningType.EMERGENCY_SHIFT_MISSING)
+        warning.push(WarningType.EMERGENCY_SHIFT_MISSING)
     }
     
-    return warnings
+    return warning
 }

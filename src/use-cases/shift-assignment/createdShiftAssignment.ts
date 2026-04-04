@@ -108,13 +108,13 @@ export const createShiftAssignment = async(
     }
 
     // ======= Validation =======
-    const warnings: string[] = []
+    const warning: string[] = []
     validateWorkHourAssignment(virtualMonthAssignments, virtualAllShiftTemplate, logger)
-    validateUserAssignmentCoverage(warnings, virtualMonthAssignments, month, year)
-    validateEmergencyAssignment(warnings, virtualMonthAssignments, month, year)
-    validateRequiredAssignment(warnings, virtualMonthAssignments, virtualAllShiftTemplate, month, year)
+    validateUserAssignmentCoverage(warning, virtualMonthAssignments, month, year)
+    validateEmergencyAssignment(warning, virtualMonthAssignments, month, year)
+    validateRequiredAssignment(warning, virtualMonthAssignments, virtualAllShiftTemplate, month, year)
 
-    console.log(warnings)
+    console.log(warning)
 
     // ======= Process list =======
     const results: CreateShiftAssignmentOutputDto[] = []
@@ -188,5 +188,5 @@ export const createShiftAssignment = async(
         results.push(created)
     }
 
-    return {results, warnings}
+    return {results, warning}
 }
