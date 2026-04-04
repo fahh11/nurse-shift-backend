@@ -2,7 +2,7 @@ import { ShiftAssignmentType } from '@service/enums/shiftAssignmentType'
 
 export interface CreateShiftAssignmentResponse {
     results: CreateShiftAssignmentOutputDto[]  
-    warnings: string[]
+    warning: string[]
 }
 
 export interface CreateShiftAssignmentOutputDto {
@@ -16,4 +16,5 @@ export interface CreateShiftAssignmentOutputDto {
     updatedBy: string
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
 }

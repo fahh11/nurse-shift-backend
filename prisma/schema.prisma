@@ -136,8 +136,7 @@ model shift_assignment {
   updated_by                  String            @db.Uuid
   created_at                  DateTime          @default(now()) @db.Timestamp(6)
   updated_at                  DateTime          @updatedAt @db.Timestamp(6)
-
-  @@unique([user_id, date, shift_template_id])
+  deleted_at                  DateTime?         @db.Timestamp(6)
 
   // Relations
   shiftAssignmentOfRequesters   shift_swap_request[]  @relation("shiftAssignOfRequesters")
@@ -159,7 +158,7 @@ model shift_swap_request {
   requester_assignment_id       String            @db.Uuid
   approver_assignment_id        String            @db.Uuid
   status                        ShiftSwapRequestStatus
-  note                          String            @db.VarChar(255)
+  note                          String?           @db.VarChar(255)
   requested_at                  DateTime          @default(now()) @db.Timestamp(6)
   responded_at                  DateTime?         @updatedAt @db.Timestamp(6)
 

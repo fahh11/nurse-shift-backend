@@ -3,6 +3,8 @@ import { ShiftAssignmentController } from '@service/interfaces/http/controllers/
 import { CreateShiftAssignmentBody } from '@service/types/shiftAssignment.type';
 import { createShiftAssignmentSchema } from '@service/docs/shiftAssignment.schema';
 import { summaryMonthShiftAssignmentSchema } from '@service/docs/shiftAssignment.schema';
+import { getShiftAssignmentforCreateSwapSchema } from '@service/docs/shiftAssignment.schema';
+import { deleteShiftAssignmentSchema } from '@service/docs/shiftAssignment.schema';
 
 export default async function shiftAssignmentRoutes(app: FastifyInstance) {
     app.post<{Body: CreateShiftAssignmentBody[]}>(
@@ -23,4 +25,22 @@ export default async function shiftAssignmentRoutes(app: FastifyInstance) {
         },
         ShiftAssignmentController.getSummaryMonthShiftAssignment
     );
+
+    app.get(
+        '/getForSwap/:wardId',
+        {
+            schema: getShiftAssignmentforCreateSwapSchema,
+            preHandler: [app.authenticate, app.requireCompletedProfile] 
+        },
+        ShiftAssignmentController.getShiftAssignmentForCreateSwap
+    );
+
+    app.patch(
+        '/delete/:shiftAssignmentId',
+        {
+            schema: deleteShiftAssignmentSchema,
+            preHandler: [app.authenticate, app.requireCompletedProfile] 
+        },
+        ShiftAssignmentController.delete
+    )
 }

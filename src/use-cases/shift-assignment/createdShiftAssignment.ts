@@ -60,7 +60,8 @@ export const createShiftAssignment = async(
     }
 
     // ดึง month assignment ของเดือนนี้
-    const allMonthAssignments = await repos.shiftAssignmentRepo.findByWardIdAndMonth(wardData.wardId, month, year)
+    const allMonthAssignments = await repos.shiftAssignmentRepo.findActiveAssignmentByWardIdAndMonth(wardData.wardId, month, year)
+
 
     const virtualMonthAssignments = [
         ...allMonthAssignments.map(a => ({
@@ -107,13 +108,13 @@ export const createShiftAssignment = async(
     }
 
     // ======= Validation =======
-    const warnings: string[] = []
+    const warning: string[] = []
     validateWorkHourAssignment(virtualMonthAssignments, virtualAllShiftTemplate, logger)
-    validateUserAssignmentCoverage(warnings, virtualMonthAssignments, month, year)
-    validateEmergencyAssignment(warnings, virtualMonthAssignments, month, year)
-    validateRequiredAssignment(warnings, virtualMonthAssignments, virtualAllShiftTemplate, month, year)
+    validateUserAssignmentCoverage(warning, virtualMonthAssignments, month, year)
+    validateEmergencyAssignment(warning, virtualMonthAssignments, month, year)
+    validateRequiredAssignment(warning, virtualMonthAssignments, virtualAllShiftTemplate, month, year)
 
-    console.log(warnings)
+    console.log(warning)
 
     // ======= Process list =======
     const results: CreateShiftAssignmentOutputDto[] = []
@@ -167,8 +168,8 @@ export const createShiftAssignment = async(
         }
 
         // validateDailyAssignment -> หากในวันนั้น มีการ leave, off, emergency จะลงอย่างอีนไม่ได้อีก
-        const existingAssignments = await repos.shiftAssignmentRepo.findByUserIdAndDate(assignedUserData.userId, normalizeDate)
-        validateDailyAssignment(wardData.wardId, existingAssignments, assignment.assignmentType)
+        const existingActiveAssignments = await repos.shiftAssignmentRepo.findActiveAssignmentByUserIdAndDate(assignedUserData.userId, normalizeDate)
+        validateDailyAssignment(wardData.wardId, existingActiveAssignments, assignment.assignmentType)
 
         // create shift assignment 
         const newShiftAssignment = new ShiftAssignment({
@@ -179,6 +180,7 @@ export const createShiftAssignment = async(
             assignmentType: assignment.assignmentType,
             createdBy: currentUser.userId,
             updatedBy: currentUser.userId,
+            deletedAt: null
         })
 
         const created = await repos.shiftAssignmentRepo.create(newShiftAssignment);
@@ -186,5 +188,5 @@ export const createShiftAssignment = async(
         results.push(created)
     }
 
-    return {results, warnings}
+    return {results, warning}
 }

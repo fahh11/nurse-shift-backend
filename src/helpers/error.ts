@@ -78,6 +78,12 @@ export const ErrorDescription = {
         message: 'User exceeds 16 continuous working hours',
     },
 
+    // Shift Swap Request Erros
+    SHIFT_SWAP_TOO_LATE: {
+        code: 'SHIFT_SWAP_TOO_LATE',
+        message: 'Swap request must be created at least 3 days in advance',
+    },
+
     // Not Found Errors
     HOSPITAL_NOT_FOUND: {
         code: 'HOSPITAL_NOT_FOUND',
@@ -102,6 +108,14 @@ export const ErrorDescription = {
     SHIFT_REQUIREMENT_NOT_FOUND: {
         code: 'SHIFT_REQUIREMENT_NOT_FOUND',
         message: 'Shift requirement not found.',
+    },
+    SHIFT_ASSIGNMENT_NOT_FOUND: {
+        code: 'SHIFT_ASSIGNMENT_NOT_FOUND',
+        message: 'Shift assignment not found.',
+    },
+    SHIFT_SWAP_REQUEST_NOT_FOUND: {
+        code: 'SHIFT_SWAP_REQUEST_NOT_FOUND',
+        message: 'Shift swap request not found.',
     },
 
     // Server Errors
@@ -132,6 +146,18 @@ export class CustomError extends Error {
     this.statusCode = statusCode
     this.errors = errors
     this.details = details
+  }
+
+  //เพิ่ม toJSON method เพื่อให้สามารถส่งข้อมูล details ออกไปได้ด้วย
+    toJSON() {
+    return {
+      message: this.message,
+      statusCode: this.statusCode,
+      // ดึง code จากก้อน errors ถ้ามี
+      code: this.errors && this.errors.length > 0 ? this.errors[0].code : undefined,
+      errors: this.errors,
+      details: this.details // ไว้ส่ง exceedInfo ออกไป
+    }
   }
 }
 
