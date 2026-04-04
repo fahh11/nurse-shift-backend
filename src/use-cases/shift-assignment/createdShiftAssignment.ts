@@ -60,7 +60,8 @@ export const createShiftAssignment = async(
     }
 
     // ดึง month assignment ของเดือนนี้
-    const allMonthAssignments = await repos.shiftAssignmentRepo.findByWardIdAndMonth(wardData.wardId, month, year)
+    const allMonthAssignments = await repos.shiftAssignmentRepo.findActiveAssignmentByWardIdAndMonth(wardData.wardId, month, year)
+
 
     const virtualMonthAssignments = [
         ...allMonthAssignments.map(a => ({
@@ -167,8 +168,8 @@ export const createShiftAssignment = async(
         }
 
         // validateDailyAssignment -> หากในวันนั้น มีการ leave, off, emergency จะลงอย่างอีนไม่ได้อีก
-        const existingAssignments = await repos.shiftAssignmentRepo.findByUserIdAndDate(assignedUserData.userId, normalizeDate)
-        validateDailyAssignment(wardData.wardId, existingAssignments, assignment.assignmentType)
+        const existingActiveAssignments = await repos.shiftAssignmentRepo.findActiveAssignmentByUserIdAndDate(assignedUserData.userId, normalizeDate)
+        validateDailyAssignment(wardData.wardId, existingActiveAssignments, assignment.assignmentType)
 
         // create shift assignment 
         const newShiftAssignment = new ShiftAssignment({
@@ -179,6 +180,7 @@ export const createShiftAssignment = async(
             assignmentType: assignment.assignmentType,
             createdBy: currentUser.userId,
             updatedBy: currentUser.userId,
+            deletedAt: null
         })
 
         const created = await repos.shiftAssignmentRepo.create(newShiftAssignment);

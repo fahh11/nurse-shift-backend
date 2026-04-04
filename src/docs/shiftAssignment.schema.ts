@@ -60,6 +60,7 @@ export const createShiftAssignmentSchema = {
                             updatedBy: { type: 'string' },
                             createdAt: { type: 'string', format: 'date-time' },
                             updatedAt: { type: 'string', format: 'date-time' },
+                            deletedAt: { type: ['string', 'null'], format: 'date-time', nullable: true },
                         }
                     }
                 },
@@ -104,6 +105,7 @@ export const updateShiftAssignmentSchema = {
                 updatedBy: { type: 'string' },
                 createdAt: { type: 'string', format: 'date-time' },
                 updatedAt: { type: 'string', format: 'date-time' },
+                deletedAt: { type: ['string', 'null'], format: 'date-time', nullable: true },
             },
         },
     },
@@ -186,6 +188,7 @@ export const deleteShiftAssignmentSchema = {
                 updatedBy: { type: 'string' },
                 createdAt: { type: 'string', format: 'date-time' },
                 updatedAt: { type: 'string', format: 'date-time' },
+                deletedAt: { type: ['string', 'null'], format: 'date-time', nullable: true },
             },
         },
     },

@@ -30,7 +30,7 @@ export const getSummaryMonthShiftAssignment = async (
     }
 
     // หา shift assignment ทั้งหมดของ ward ตามช่วงเวลา
-    const allShiftAssignmentRecords = await repos.shiftAssignmentRepo.findByWardIdAndMonth(wardId, month, year)
+    const allShiftAssignmentRecords = await repos.shiftAssignmentRepo.findActiveAssignmentByWardIdAndMonth(wardId, month, year)
 
     const mapShiftAssignments = new Map<
         string,
@@ -67,6 +67,9 @@ export const getSummaryMonthShiftAssignment = async (
 
     // เอา assignment เข้า map
     for (const record of allShiftAssignmentRecords) {
+        // หาก record ถูก delete ไปแล้วให้ข้าม
+        if (record.deletedAt) continue
+
         const memberOfGroup = mapShiftAssignments.get(record.userId)
         if (!memberOfGroup) continue
 
