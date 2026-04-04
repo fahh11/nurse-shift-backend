@@ -1,4 +1,5 @@
-import { ShiftAssignmentType } from "@service/enums/shiftAssignmentType";
+import { ShiftAssignmentType } from '@service/enums/shiftAssignmentType';
+import { ShiftTemplateType } from '@service/enums/shiftTemplateType';
 
 const tags = ['ShiftAssignment'];
 
@@ -189,6 +190,60 @@ export const deleteShiftAssignmentSchema = {
                 createdAt: { type: 'string', format: 'date-time' },
                 updatedAt: { type: 'string', format: 'date-time' },
                 deletedAt: { type: ['string', 'null'], format: 'date-time', nullable: true },
+            },
+        },
+    },
+};
+
+export const getShiftAssignmentforCreateSwapSchema = {
+    description: 'Get filter shift assignments for create shift swap request',
+    tags,
+    params: {
+        type: 'object',
+        required: ['wardId'],
+        properties: {
+            wardId: { type: 'string' },
+        },
+    },
+
+    querystring: {
+        type: 'object',
+        required: ['year', 'month'],
+        properties: {
+            year: { type: 'integer' },
+            month: {
+                type: 'integer',
+                minimum: 1,
+                maximum: 12,
+            },
+            day: {
+                type: 'integer',
+                minimum: 1,
+                maximum: 31,
+            },
+            approverUserId: {
+                type: 'string',
+                nullable: true
+            }
+        },
+        additionalProperties: false,
+    },
+
+    response: {
+        200: {
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    approverShiftAssignmentId: { type: 'string' },
+                    approverName: { type: 'string' },
+                    shiftAssignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
+                    shiftTemplateType: { 
+                        type: ['string', 'null'], 
+                        enum: Object.values(ShiftTemplateType), 
+                        nullable: true
+                    },
+                },
             },
         },
     },

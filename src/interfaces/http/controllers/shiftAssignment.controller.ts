@@ -2,6 +2,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { CreateShiftAssignmentBody } from '@service/types/shiftAssignment.type';
 import { createShiftAssignment } from '@service/use-cases/shift-assignment/createdShiftAssignment';
 import { getSummaryMonthShiftAssignment } from '@service/use-cases/shift-assignment/getShiftAssignment';
+import { getShiftAssignmentforCreateSwap } from '@service/use-cases/shift-assignment/getShiftAssignment';
 import { deleteShiftAssignment } from '@service/use-cases/shift-assignment/deleteShiftAssignment';
 import { PrismaShiftAssignmentRepository } from '@service/infrastructure/persistence/prisma/repositories/shiftAssignment.repository.impl';
 import { PrismaShiftTemplateRepository } from '@service/infrastructure/persistence/prisma/repositories/shiftTemplate.repository.impl';
@@ -47,6 +48,29 @@ export const ShiftAssignmentController = {
             month,
             request.log,
             {shiftAssignmentRepo, shiftTemplateRepo, userRepo, wardMemberRepo}
+        );
+        return reply.send(result);
+    },
+
+    getShiftAssignmentForCreateSwap: async (request: FastifyRequest, reply: FastifyReply) => {
+        const currentUser = request.user
+        const { wardId } = request.params as { wardId: string }
+        const { year, month, approverUserId, day } = request.query as {
+            year: number
+            month: number
+            approverUserId?: string
+            day?: number
+        }
+        
+        const result = await getShiftAssignmentforCreateSwap(
+            currentUser.userId,
+            wardId,
+            approverUserId,
+            year,
+            month,
+            day,
+            request.log,
+            {shiftAssignmentRepo, shiftTemplateRepo, userRepo, wardRepo}
         );
         return reply.send(result);
     },
