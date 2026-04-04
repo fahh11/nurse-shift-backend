@@ -138,8 +138,6 @@ model shift_assignment {
   updated_at                  DateTime          @updatedAt @db.Timestamp(6)
   deleted_at                  DateTime?         @db.Timestamp(6)
 
-  @@unique([user_id, date, shift_template_id])
-
   // Relations
   shiftAssignmentOfRequesters   shift_swap_request[]  @relation("shiftAssignOfRequesters")
   shiftAssignmentOfApprovers    shift_swap_request[]  @relation("shiftAssignOfApprovers")
