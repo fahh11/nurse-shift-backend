@@ -10,8 +10,6 @@ import { PrismaUserRepository } from '@service/infrastructure/persistence/prisma
 import { PrismaWardRepository } from '@service/infrastructure/persistence/prisma/repositories/ward.repository.impl';
 import { PrismaWardMemberRepository } from '@service/infrastructure/persistence/prisma/repositories/wardMember.repository.impl';
 
-
-
 const shiftAssignmentRepo = new PrismaShiftAssignmentRepository()
 const shiftTemplateRepo = new PrismaShiftTemplateRepository()
 const shiftRequirementRepo = new PrismaShiftRequirementRepository()

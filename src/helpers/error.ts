@@ -78,6 +78,12 @@ export const ErrorDescription = {
         message: 'User exceeds 16 continuous working hours',
     },
 
+    // Shift Swap Request Erros
+    SHIFT_SWAP_TOO_LATE: {
+        code: 'SHIFT_SWAP_TOO_LATE',
+        message: 'Swap request must be created at least 3 days in advance',
+    },
+
     // Not Found Errors
     HOSPITAL_NOT_FOUND: {
         code: 'HOSPITAL_NOT_FOUND',
