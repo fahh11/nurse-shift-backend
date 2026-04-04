@@ -16,4 +16,5 @@ export interface CreateShiftAssignmentOutputDto {
     updatedBy: string
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
 }

@@ -30,6 +30,7 @@ export class PrismaShiftAssignmentRepository implements ShiftAssignmentRepositor
             updatedBy: created.updated_by,
             createdAt: created.created_at,
             updatedAt: created.updated_at,
+            deletedAt: created.deleted_at,
         })
     }
 
@@ -50,14 +51,16 @@ export class PrismaShiftAssignmentRepository implements ShiftAssignmentRepositor
             updatedBy: shiftAssignment.updated_by,
             createdAt: shiftAssignment.created_at,
             updatedAt: shiftAssignment.updated_at,
+            deletedAt: shiftAssignment.deleted_at,
         }) : null
     }
 
-    async findByUserIdAndDate(userId: string, date: Date): Promise<ShiftAssignment[]> {
+    async findActiveAssignmentByUserIdAndDate(userId: string, date: Date): Promise<ShiftAssignment[]> {
         const shiftAssignments = await prisma.shift_assignment.findMany({ 
             where: {
                 user_id: userId,
-                date: date
+                date: date,
+                deleted_at: null,
             }
         })
 
@@ -74,18 +77,20 @@ export class PrismaShiftAssignmentRepository implements ShiftAssignmentRepositor
                     updatedBy: shiftAssignment.updated_by,
                     createdAt: shiftAssignment.created_at,
                     updatedAt: shiftAssignment.updated_at,
+                    deletedAt: shiftAssignment.deleted_at,
                 })
         )
     }
 
-    async findByWardIdAndMonth(wardId: string, month: number, year: number): Promise<ShiftAssignment[]> {
+    async findActiveAssignmentByWardIdAndMonth(wardId: string, month: number, year: number): Promise<ShiftAssignment[]> {
         const shiftAssignments = await prisma.shift_assignment.findMany({ 
             where: {
                 ward_id: wardId,
                 date: {
                     gte: new Date(year, month - 1, 1),
                     lt: new Date(year, month, 1),
-                }
+                },
+                deleted_at: null
             }
         })
 
@@ -102,6 +107,7 @@ export class PrismaShiftAssignmentRepository implements ShiftAssignmentRepositor
                     updatedBy: shiftAssignment.updated_by,
                     createdAt: shiftAssignment.created_at,
                     updatedAt: shiftAssignment.updated_at,
+                    deletedAt: shiftAssignment.deleted_at,
                 })
         )
     }
@@ -122,6 +128,7 @@ export class PrismaShiftAssignmentRepository implements ShiftAssignmentRepositor
                     updatedBy: shiftAssignment.updated_by,
                     createdAt: shiftAssignment.created_at,
                     updatedAt: shiftAssignment.updated_at,
+                    deletedAt: shiftAssignment.deleted_at,
                 })
         )
     }
@@ -132,7 +139,9 @@ export class PrismaShiftAssignmentRepository implements ShiftAssignmentRepositor
             data: {
                 shift_template_id: shiftAssignment.shiftTemplateId,
                 assignment_type: shiftAssignment.assignmentType,
+                updated_by: shiftAssignment.updatedBy,
                 updated_at: new Date(),
+                deleted_at: shiftAssignment.deletedAt,
             }
         })
 
@@ -147,6 +156,7 @@ export class PrismaShiftAssignmentRepository implements ShiftAssignmentRepositor
             updatedBy: updated.updated_by,
             createdAt: updated.created_at,
             updatedAt: updated.updated_at,
+            deletedAt: updated.deleted_at,
         })
     }
 

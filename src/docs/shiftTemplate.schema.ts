@@ -1,4 +1,4 @@
-import { ShiftTemplateType } from "@service/enums/shiftTemplateType";
+import { ShiftTemplateType } from '@service/enums/shiftTemplateType';
 
 const tags = ['ShiftTemplate'];
 

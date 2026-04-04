@@ -103,6 +103,14 @@ export const ErrorDescription = {
         code: 'SHIFT_REQUIREMENT_NOT_FOUND',
         message: 'Shift requirement not found.',
     },
+    SHIFT_ASSIGNMENT_NOT_FOUND: {
+        code: 'SHIFT_ASSIGNMENT_NOT_FOUND',
+        message: 'Shift assignment not found.',
+    },
+    SHIFT_SWAP_REQUEST_NOT_FOUND: {
+        code: 'SHIFT_SWAP_REQUEST_NOT_FOUND',
+        message: 'Shift swap request not found.',
+    },
 
     // Server Errors
     INTERNAL_SERVER_ERROR: {

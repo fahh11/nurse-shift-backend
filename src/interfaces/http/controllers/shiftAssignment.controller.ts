@@ -2,6 +2,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { CreateShiftAssignmentBody } from '@service/types/shiftAssignment.type';
 import { createShiftAssignment } from '@service/use-cases/shift-assignment/createdShiftAssignment';
 import { getSummaryMonthShiftAssignment } from '@service/use-cases/shift-assignment/getShiftAssignment';
+import { deleteShiftAssignment } from '@service/use-cases/shift-assignment/deleteShiftAssignment';
 import { PrismaShiftAssignmentRepository } from '@service/infrastructure/persistence/prisma/repositories/shiftAssignment.repository.impl';
 import { PrismaShiftTemplateRepository } from '@service/infrastructure/persistence/prisma/repositories/shiftTemplate.repository.impl';
 import { PrismaShiftRequirementRepository } from '@service/infrastructure/persistence/prisma/repositories/shiftRequirement.repository.impl';
@@ -51,4 +52,18 @@ export const ShiftAssignmentController = {
         );
         return reply.send(result);
     },
+
+    delete: async (request: FastifyRequest, reply: FastifyReply) => {
+        const currentUser = request.user
+        const { shiftAssignmentId } = request.params as { shiftAssignmentId: string }
+
+        const result = await deleteShiftAssignment(
+            shiftAssignmentId,
+            currentUser.userId,
+            request.log,
+            {shiftAssignmentRepo, userRepo, wardRepo, wardMemberRepo}
+        );
+
+        return reply.send(result);
+    }
 }

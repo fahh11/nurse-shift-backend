@@ -12,6 +12,7 @@ export class ShiftAssignment {
     public updatedBy: string; // FK
     public readonly createdAt: Date;
     public updatedAt: Date;
+    public deletedAt: Date | null;
 
     constructor(params: {
         shiftAssignmentId?: string
@@ -24,6 +25,7 @@ export class ShiftAssignment {
         updatedBy: string
         createdAt?: Date
         updatedAt?: Date
+        deletedAt?: Date | null
     }) {
         this.shiftAssignmentId = params.shiftAssignmentId ?? uuidv4();
         this.shiftTemplateId = params.shiftTemplateId ?? null;
@@ -35,12 +37,14 @@ export class ShiftAssignment {
         this.updatedBy = params.updatedBy;
         this.createdAt = params.createdAt ?? new Date();
         this.updatedAt = params.updatedAt ?? new Date();
+        this.deletedAt = params.deletedAt ?? null;
     }
 
     update(data: {
         shiftTemplateId?: string;
         assignmentType?: ShiftAssignmentType;
         updatedBy?: string;
+        deletedAt?: Date | null;
     }) {
         if (data.shiftTemplateId !== undefined) {
             this.shiftTemplateId = data.shiftTemplateId;
@@ -52,6 +56,10 @@ export class ShiftAssignment {
 
         if (data.updatedBy !== undefined) {
             this.updatedBy = data.updatedBy;
+        }
+
+        if (data.deletedAt !== undefined) {
+            this.deletedAt = data.deletedAt;
         }
 
         this.updatedAt = new Date();
