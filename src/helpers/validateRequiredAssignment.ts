@@ -5,7 +5,7 @@ import { ShiftAssignmentType } from '@service/enums/shiftAssignmentType'
 import { ShiftTemplateType } from '@service/enums/shiftTemplateType'
 
 export const validateRequiredAssignment = (
-    warnings: string[],
+    warning: string[],
     allAssignments: VirtualMonthAssignment[],
     allShiftTemplate: VirtualShiftTemplate[],
     month: number,
@@ -71,7 +71,9 @@ export const validateRequiredAssignment = (
         const typeMap = shiftAssignmentMap.get(day)
 
         if (!typeMap) {
-            warnings.push(WarningType.SHIFT_REQUIREMENT_MISSING)
+            if (!warning.includes(WarningType.SHIFT_REQUIREMENT_MISSING)) {
+                warning.push(WarningType.SHIFT_REQUIREMENT_MISSING)
+            }
             break
         }
 
@@ -81,10 +83,13 @@ export const validateRequiredAssignment = (
             const required = templateInfo?.required ?? 0
 
             if (assignedCount < required) {
-                warnings.push(WarningType.SHIFT_REQUIREMENT_MISSING)
+                if (!warning.includes(WarningType.SHIFT_REQUIREMENT_MISSING)) {
+                    warning.push(WarningType.SHIFT_REQUIREMENT_MISSING)
+                }
+                break
             }
         }
     }
     
-    return warnings
+    return warning
 }
