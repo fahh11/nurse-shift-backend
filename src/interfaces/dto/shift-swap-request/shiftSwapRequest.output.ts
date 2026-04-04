@@ -9,5 +9,5 @@ export interface CreateShiftSwapRequestOutputDto {
     status: ShiftSwapRequestStatus
     note: string | null
     requestedAt: Date
-    responsedAt: Date | null
+    respondedAt: Date | null
 }
