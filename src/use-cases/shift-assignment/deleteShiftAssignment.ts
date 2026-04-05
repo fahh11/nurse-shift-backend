@@ -49,7 +49,7 @@ export const deleteShiftAssignment = async (
     // delete ได้ต้องเป็น head_nurse เท่านั้น
     if (wardMemberDate.role !== WardMemberRole.HEAD_NURSE) {
         console.log('Ward access denied')
-        throw throwCustomError(ErrorDescription.WARD_ACCESS_DENIED, StatusCode.NOT_FOUND_404)
+        throw throwCustomError(ErrorDescription.WARD_ACCESS_DENIED, StatusCode.FORBIDDEN_403)
     }
 
     // ======= Soft Delete =======
