@@ -67,6 +67,46 @@ export class PrismaUserRepository implements UserRepository {
         : null
     }
 
+    async findByLineLinkToken(token: string): Promise<User | null> {
+        const user = await prisma.user.findUnique({ where: { line_link_token: token } })
+        return user
+        ? new User({
+            userId: user.user_id,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            personalEmail: user.personal_email,
+            googleEmailId: user.google_email_id,
+            lineUserId: user.line_user_id,
+            lineLinkToken: user.line_link_token,
+            lineLinkTokenExpire: user.line_link_token_expire,
+            hospitalId: user.hospital_id,
+            profileCompleted: user.profile_completed,
+            createdAt: user.created_at,
+            updatedAt: user.updated_at,
+        })
+        : null
+    }
+
+    async findByLineUserId(lineUserId: string): Promise<User | null> {
+        const user = await prisma.user.findUnique({ where: { line_user_id: lineUserId } })
+        return user
+        ? new User({
+            userId: user.user_id,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            personalEmail: user.personal_email,
+            googleEmailId: user.google_email_id,
+            lineUserId: user.line_user_id,
+            lineLinkToken: user.line_link_token,
+            lineLinkTokenExpire: user.line_link_token_expire,
+            hospitalId: user.hospital_id,
+            profileCompleted: user.profile_completed,
+            createdAt: user.created_at,
+            updatedAt: user.updated_at,
+        })
+        : null
+    }
+
     async findAll(): Promise<User[]> {
         const users = await prisma.user.findMany()
         return users.map(
