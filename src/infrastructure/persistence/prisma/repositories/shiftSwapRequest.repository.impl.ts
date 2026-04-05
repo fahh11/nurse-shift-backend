@@ -106,6 +106,32 @@ export class PrismaShiftSwapRequestRepository implements ShiftSwapRequestReposit
         )
     }
 
+    async findByUserId(userId: string): Promise<ShiftSwapRequest[]> {
+        const shiftSwapRequests = await prisma.shift_swap_request.findMany({
+            where: {
+                OR: [
+                    { requester_user_id: userId },
+                    { approver_user_id: userId }
+                ],
+            },
+        })
+
+        return shiftSwapRequests.map(
+            (shiftSwapRequest) =>
+                new ShiftSwapRequest({
+                    shiftSwapRequestId: shiftSwapRequest.shift_swap_request_id,
+                    requesterUserId: shiftSwapRequest.requester_user_id,
+                    approverUserId: shiftSwapRequest.approver_user_id,
+                    requesterAssignmentId: shiftSwapRequest.requester_assignment_id,
+                    approverAssignmentId: shiftSwapRequest.approver_assignment_id,
+                    status: shiftSwapRequest.status as ShiftSwapRequestStatus,
+                    note: shiftSwapRequest.note,
+                    requestedAt: shiftSwapRequest.requested_at,
+                    respondedAt: shiftSwapRequest.responded_at,
+                })
+        )
+    }
+
     async findAll(): Promise<ShiftSwapRequest[]> {
         const shiftSwapRequests = await prisma.shift_swap_request.findMany({})
 
