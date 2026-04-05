@@ -1,6 +1,7 @@
 import { ShiftSwapRequestStatus } from '@service/generated/prisma/enums';
 import { ShiftAssignmentType } from '@service/enums/shiftAssignmentType';
 import { ShiftTemplateType } from '@service/enums/shiftTemplateType';
+import { TargetForGetShiftSwap } from '@service/enums/targetForGetShiftSwap';
 
 const tags = ['ShiftSwapRequest'];
 
@@ -97,40 +98,7 @@ export const getAllShiftSwapRequestForSchema = {
     },
 };
 
-export const getRequestedShiftSwapsSchema = {
-    description: 'Get user shift swap request record',
-    tags,
-    params: {
-        type: 'object',
-        required: ['wardId'],
-        properties: {
-            wardId: { type: 'string' },
-        },
-    },
-    response: {
-        200: {
-            type: 'array',
-            items: {
-                type: 'object',
-                properties: {
-                    shiftSwapRequestId: { type: 'string' },
-                    requesterName: { type: 'string' },
-                    requesterAssignmentDate: { type: 'string', format: 'date-time' },
-                    requesterAssignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
-                    requesterTemplateType: { type: ['string', 'null'], enum: Object.values(ShiftTemplateType) },
-                    approverName: { type: 'string' },
-                    approverAssignmentDate: { type: 'string', format: 'date-time' },
-                    approverAssignmentType: { type: 'string', enum: Object.values(ShiftAssignmentType) },
-                    approverTemplateType: { type: ['string', 'null'], enum: Object.values(ShiftTemplateType) },
-                    status: { type: 'string', enum: Object.values(ShiftSwapRequestStatus) },
-                    note: { type: ['string', 'null'], nullable: true },
-                },
-            },
-        },
-    },
-};
-
-export const getReceivedShiftSwapsSchema = {
+export const getUserShiftSwapsSchema = {
     description: 'Get user shift swap received record',
     tags,
     params: {
@@ -139,6 +107,14 @@ export const getReceivedShiftSwapsSchema = {
         properties: {
             wardId: { type: 'string' },
         },
+    },
+    querystring: {
+        type: 'object',
+        required: ['target'],
+        properties: {
+            target: { type: 'string', enum: Object.values(TargetForGetShiftSwap) },
+        },
+        additionalProperties: false,
     },
     response: {
         200: {
