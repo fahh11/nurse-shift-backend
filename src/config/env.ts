@@ -23,6 +23,10 @@ export const env = {
         jwtSecret: envVar.get("JWT_SECRET").required().asString(),
     },
 
+    line: {
+        channelAccessToken: envVar.get("LINE_CHANNEL_ACCESS_TOKEN").required().asString(),
+    },
+
     frontEnd: {
         redirectUrl: envVar.get("FRONTEND_REDIRECT_URL").required().asString(),
     }
