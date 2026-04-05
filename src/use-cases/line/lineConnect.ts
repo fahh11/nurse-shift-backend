@@ -9,7 +9,6 @@ export const lineConnect = async(
     logger: FastifyInstance['log'],
     repos: {
         userRepo: UserRepository
-
     }
 ) => {
     // หา user ปัจจุบันจาก id

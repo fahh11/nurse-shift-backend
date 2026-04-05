@@ -138,6 +138,7 @@ export class PrismaShiftAssignmentRepository implements ShiftAssignmentRepositor
             where: { shift_assignment_id: shiftAssignment.shiftAssignmentId },
             data: {
                 shift_template_id: shiftAssignment.shiftTemplateId,
+                user_id: shiftAssignment.userId,
                 assignment_type: shiftAssignment.assignmentType,
                 updated_by: shiftAssignment.updatedBy,
                 updated_at: new Date(),

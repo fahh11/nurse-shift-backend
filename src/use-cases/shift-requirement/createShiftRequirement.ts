@@ -45,7 +45,7 @@ export const createShiftRequirement = async(
     // user ที่แก้ไขต้องเป็นคนสร้าง ward นี้
     if (currentUser.userId !== wardData.createdBy) {
         logger.error('You do not have permission to access this ward')
-        throw throwCustomError(ErrorDescription.WARD_ACCESS_DENIED, StatusCode.NOT_FOUND_404)
+        throw throwCustomError(ErrorDescription.WARD_ACCESS_DENIED, StatusCode.FORBIDDEN_403)
     }
 
     // วันที่เริ่มใช้ของ requirement ใหม่
