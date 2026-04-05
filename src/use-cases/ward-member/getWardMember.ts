@@ -31,6 +31,7 @@ export const getAllWardMemberInWard = async(
                 userId: member.userId,
                 firstName: member.firstName,
                 lastName: member.lastName,
+                role: record.role,
             };
         })
     );
