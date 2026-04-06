@@ -132,6 +132,7 @@ export const getWardById = async (
     }
 
     const result = {
+        wardId: wardData.wardId,
         wardName: wardData.wardName,
         hospitalName: hospitalData.name,
         createdBy: `${wardOwner.firstName} ${wardOwner.lastName}`,

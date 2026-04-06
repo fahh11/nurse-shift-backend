@@ -13,14 +13,14 @@ export default async function seedShiftAssignment(
 
          const ward1OfA = await prisma.ward.findFirst({
             where: {
-                ward_name: "Ward 1 of Hospital A"
+                ward_name: "หอผู้ป่วยอายุรกรรม"
             }
         })
 
         const morningOfWard1A = await prisma.shift_template.findFirst({
             where: {
                 ward: {
-                    ward_name: "Ward 1 of Hospital A"
+                    ward_name: "หอผู้ป่วยอายุรกรรม"
                 },
                 type: ShiftTemplateType.morning
             }
@@ -29,7 +29,7 @@ export default async function seedShiftAssignment(
         const afternoonOfWard1A = await prisma.shift_template.findFirst({
             where: {
                 ward: {
-                    ward_name: "Ward 1 of Hospital A"
+                    ward_name: "หอผู้ป่วยอายุรกรรม"
                 },
                 type: ShiftTemplateType.afternoon
             }
@@ -38,7 +38,7 @@ export default async function seedShiftAssignment(
         const nightOfWard1A = await prisma.shift_template.findFirst({
             where: {
                 ward: {
-                    ward_name: "Ward 1 of Hospital A"
+                    ward_name: "หอผู้ป่วยอายุรกรรม"
                 },
                 type: ShiftTemplateType.night
             }
@@ -47,33 +47,33 @@ export default async function seedShiftAssignment(
         await prisma.shift_assignment.createMany({
             data: [
                 // Create shift assignment in "Ward 1 of Hospital A"
-                {
-                    shift_template_id: morningOfWard1A!.shift_template_id,
-                    ward_id: ward1OfA!.ward_id,
-                    user_id: user1!.user_id,
-                    date: new Date("2026-01-01"),
-                    assignment_type: ShiftAssignmentType.shift,
-                    created_by: admin!.user_id,
-                    updated_by: admin!.user_id,
-                },
-                {
-                    shift_template_id: nightOfWard1A!.shift_template_id,
-                    ward_id: ward1OfA!.ward_id,
-                    user_id: user1!.user_id,
-                    date: new Date("2026-01-01"),
-                    assignment_type: ShiftAssignmentType.shift,
-                    created_by: admin!.user_id,
-                    updated_by: admin!.user_id,
-                },
-                {
-                    shift_template_id: null,
-                    ward_id: ward1OfA!.ward_id,
-                    user_id: user2!.user_id,
-                    date: new Date("2026-01-01"),
-                    assignment_type: ShiftAssignmentType.off,
-                    created_by: admin!.user_id,
-                    updated_by: admin!.user_id,
-                },
+                // {
+                //     shift_template_id: morningOfWard1A!.shift_template_id,
+                //     ward_id: ward1OfA!.ward_id,
+                //     user_id: user1!.user_id,
+                //     date: new Date("2026-04-02"),
+                //     assignment_type: ShiftAssignmentType.shift,
+                //     created_by: admin!.user_id,
+                //     updated_by: admin!.user_id,
+                // },
+                // {
+                //     shift_template_id: nightOfWard1A!.shift_template_id,
+                //     ward_id: ward1OfA!.ward_id,
+                //     user_id: user1!.user_id,
+                //     date: new Date("2026-04-02"),
+                //     assignment_type: ShiftAssignmentType.shift,
+                //     created_by: admin!.user_id,
+                //     updated_by: admin!.user_id,
+                // },
+                // {
+                //     shift_template_id: null,
+                //     ward_id: ward1OfA!.ward_id,
+                //     user_id: user2!.user_id,
+                //     date: new Date("2026-04-02"),
+                //     assignment_type: ShiftAssignmentType.off,
+                //     created_by: admin!.user_id,
+                //     updated_by: admin!.user_id,
+                // },
             ]
         })
 

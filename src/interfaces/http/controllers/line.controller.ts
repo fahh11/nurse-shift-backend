@@ -24,5 +24,14 @@ export const LineController = {
         await lineWebhook(input, request.log, { userRepo });
 
         return reply.status(200).send('OK');
+    },
+
+    lineExportReport: async (request: FastifyRequest, reply: FastifyReply) => {
+        const input = request.body || {};
+        console.log(input);
+
+        await lineWebhook(input, request.log, { userRepo });
+
+        return reply.status(200).send('OK');
     }
 }
