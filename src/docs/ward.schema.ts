@@ -119,6 +119,7 @@ export const getWardByIdSchema = {
         200: {
             type: 'object',
             properties: {
+                wardId: { type: 'string' },
                 wardName: { type: 'string' },
                 hospitalName: { type: 'string' },
                 createdBy: { type: 'string' },

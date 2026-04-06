@@ -6,15 +6,19 @@ export default async function seedHospital(
     try {
         await prisma.hospital.createMany({
             data: [
-                {
-                    name: 'Hospital A',
-                    address: 'Location of Hospital A',
-                },
-                {
-                    name: 'Hospital B',
-                    address: 'Location of Hospital B',
-                },
-            ]
+            {
+                name: 'โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์',
+                address: 'เขตจตุจักร กรุงเทพมหานคร',
+            },
+            {
+                name: 'โรงพยาบาลศิริราช',
+                address: 'เขตบางกอกน้อย กรุงเทพมหานคร',
+            },
+            {
+                name: 'โรงพยาบาลรามาธิบดี',
+                address: 'เขตราชเทวี กรุงเทพมหานคร',
+            },
+        ]
         });
 
         console.log("✅ Seeding hospitals completed.");

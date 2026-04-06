@@ -8,13 +8,13 @@ export default async function seedShiftTemplate(
         // เอา ward มาก่อน (ต้องมีอยู่แล้ว)
         const ward1OfA = await prisma.ward.findFirst({
             where: {
-                ward_name: "Ward 1 of Hospital A"
+                ward_name: "หอผู้ป่วยอายุรกรรม"
             }
         })
 
         const ward2OfA = await prisma.ward.findFirst({
             where: {
-                ward_name: "Ward 2 of Hospital A"
+                ward_name: "หอผู้ป่วยศัลยกรรม"
             }
         })
 

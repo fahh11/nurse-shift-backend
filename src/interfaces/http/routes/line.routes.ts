@@ -15,4 +15,10 @@ export default async function lineRoutes(app: FastifyInstance) {
         '/webhook',
         LineController.lineWebhook
     );
+
+    // webhook จาก LINE (ห้าม require auth)
+    app.post(
+        '/export',
+        LineController.lineExportReport
+    );
 }
