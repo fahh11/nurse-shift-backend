@@ -51,6 +51,7 @@ export const getAllWardMemberInWardSchema = {
                     userId: { type: 'string' },
                     firstName: { type: 'string' },
                     lastName: { type: 'string' },
+                    role: { type: 'string', enum: Object.values(WardMemberRole) },
                 },
             },
         },

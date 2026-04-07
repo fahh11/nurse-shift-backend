@@ -9,6 +9,8 @@ import shiftTemplateRoutes from '@service/interfaces/http/routes/shiftTemplate.r
 import shiftRequirementeRoutes from '@service/interfaces/http/routes/shiftRequirement.routes'
 import shiftAssignmentRoutes from '@service/interfaces/http/routes/shiftAssignment.routes'
 import shiftSwapRequestRoutes from '@service/interfaces/http/routes/shiftSwapRequest.routes'
+import lineRoutes from '@service/interfaces/http/routes/line.routes'
+import reportRoutes from '@service/interfaces/http/routes/report.routes'
 
 export const registerRoutes = (app: FastifyInstance) => {
   app.register(userRoutes, { prefix: '/api/user' })
@@ -20,6 +22,8 @@ export const registerRoutes = (app: FastifyInstance) => {
   app.register(shiftRequirementeRoutes, { prefix: '/api/shift-requirement' })
   app.register(shiftAssignmentRoutes, { prefix: '/api/shift-assignment' })
   app.register(shiftSwapRequestRoutes, { prefix: '/api/shift-swap-request' })
+  app.register(lineRoutes, { prefix: '/api/line' })
+  app.register(reportRoutes, { prefix: '/api/report' })
 
   app.register(healthRoutes, { prefix: '/api/health' })
 }

@@ -9,7 +9,7 @@ export default async function seedShiftRequirement(
         const morningOfWard1A = await prisma.shift_template.findFirst({
             where: {
                 ward: {
-                    ward_name: "Ward 1 of Hospital A"
+                    ward_name: "หอผู้ป่วยอายุรกรรม"
                 },
                 type: ShiftTemplateType.morning
             }
@@ -18,7 +18,7 @@ export default async function seedShiftRequirement(
         const afternoonOfWard1A = await prisma.shift_template.findFirst({
             where: {
                 ward: {
-                    ward_name: "Ward 1 of Hospital A"
+                    ward_name: "หอผู้ป่วยอายุรกรรม"
                 },
                 type: ShiftTemplateType.afternoon
             }
@@ -27,7 +27,7 @@ export default async function seedShiftRequirement(
         const nightOfWard1A = await prisma.shift_template.findFirst({
             where: {
                 ward: {
-                    ward_name: "Ward 1 of Hospital A"
+                    ward_name: "หอผู้ป่วยอายุรกรรม"
                 },
                 type: ShiftTemplateType.night
             }
@@ -36,7 +36,7 @@ export default async function seedShiftRequirement(
         const morningOfWard2A = await prisma.shift_template.findFirst({
             where: {
                 ward: {
-                    ward_name: "Ward 2 of Hospital A"
+                    ward_name: "หอผู้ป่วยศัลยกรรม"
                 },
                 type: ShiftTemplateType.morning
             }
@@ -45,7 +45,7 @@ export default async function seedShiftRequirement(
         const afternoonOfWard2A = await prisma.shift_template.findFirst({
             where: {
                 ward: {
-                    ward_name: "Ward 2 of Hospital A"
+                    ward_name: "หอผู้ป่วยศัลยกรรม"
                 },
                 type: ShiftTemplateType.afternoon
             }
@@ -54,7 +54,7 @@ export default async function seedShiftRequirement(
         const nightOfWard2A = await prisma.shift_template.findFirst({
             where: {
                 ward: {
-                    ward_name: "Ward 2 of Hospital A"
+                    ward_name: "หอผู้ป่วยศัลยกรรม"
                 },
                 type: ShiftTemplateType.night
             }
@@ -65,19 +65,19 @@ export default async function seedShiftRequirement(
                 // Create shift requirement in "Ward 1 of Hospital A"
                 {
                     shift_template_id: morningOfWard1A!.shift_template_id,
-                    required_people: 3,
+                    required_people: 2,
                     effective_from: new Date(),
                     effective_to: null
                 },
                 {
                     shift_template_id: afternoonOfWard1A!.shift_template_id,
-                    required_people: 4,
+                    required_people: 3,
                     effective_from: new Date(),
                     effective_to: null
                 },
                 {
                     shift_template_id: nightOfWard1A!.shift_template_id,
-                    required_people: 5,
+                    required_people: 2,
                     effective_from: new Date(),
                     effective_to: null
                 },

@@ -5,7 +5,7 @@ export class ShiftAssignment {
     public readonly shiftAssignmentId: string;
     public  shiftTemplateId: string | null; //FK
     public readonly wardId: string; //FK
-    public readonly userId: string; //FK
+    public userId: string; //FK
     public readonly date: Date;
     public assignmentType: ShiftAssignmentType;
     public createdBy: string; // FK
@@ -42,12 +42,17 @@ export class ShiftAssignment {
 
     update(data: {
         shiftTemplateId?: string;
+        userId?: string;
         assignmentType?: ShiftAssignmentType;
         updatedBy?: string;
         deletedAt?: Date | null;
     }) {
         if (data.shiftTemplateId !== undefined) {
             this.shiftTemplateId = data.shiftTemplateId;
+        }
+
+        if (data.userId !== undefined) {
+            this.userId = data.userId;
         }
 
         if (data.assignmentType !== undefined) {

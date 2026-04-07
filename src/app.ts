@@ -66,6 +66,23 @@ export function buildApp() {
     return reply.send(error); // Error อื่นๆ ให้ Fastify จัดการตามปกติ
   });
 
+  // แก้ Fastify ให้รับ empty body หรือ raw JSON
+  app.addContentTypeParser(
+    'application/json',
+    { parseAs: 'string' },
+    function (req, body, done) {
+      try {
+        // ถ้า body เป็น Buffer ให้แปลงเป็น string
+        const strBody = typeof body === 'string' ? body : body.toString('utf8');
+
+        const json = strBody ? JSON.parse(strBody) : {};
+        done(null, json); // err ต้องเป็น null
+      } catch (err) {
+        done(err as Error, undefined); // cast err เป็น Error
+      }
+    }
+  );
+
   // 🚦 Register routes
   registerRoutes(app);
 
