@@ -55,12 +55,12 @@ export class PrismaShiftAssignmentRepository implements ShiftAssignmentRepositor
         }) : null
     }
 
-    async findActiveAssignmentByUserIdAndDate(userId: string, date: Date): Promise<ShiftAssignment[]> {
+    async findActiveAssignmentByUserIdAndDate(date: Date, userId?: string): Promise<ShiftAssignment[]> {
         const shiftAssignments = await prisma.shift_assignment.findMany({ 
             where: {
-                user_id: userId,
                 date: date,
                 deleted_at: null,
+                ...(userId && { user_id: userId }) // ✅ optional filter
             }
         })
 

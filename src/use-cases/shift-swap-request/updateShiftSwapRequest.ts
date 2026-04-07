@@ -21,6 +21,7 @@ export const updateShiftSwapRequest = async(
         shiftSwapRequestRepo: ShiftSwapRequestRepository
         userRepo: UserRepository
         shiftAssignmentRepo: ShiftAssignmentRepository
+        shiftTemplateRepo: ShiftTemplateRepository
     },
 
     services: {
@@ -62,12 +63,44 @@ export const updateShiftSwapRequest = async(
         throw throwCustomError(ErrorDescription.SHIFT_ASSIGNMENT_NOT_FOUND, StatusCode.NOT_FOUND_404)
     }
 
+    // หา shift template ที่ต้องการ approve, reject
+    let requesterTemplateData = null
+    let approverTemplateData = null
+
+    if (requesterAssignmentData.shiftTemplateId) {
+        requesterTemplateData = await repos.shiftTemplateRepo.findById(
+            requesterAssignmentData.shiftTemplateId
+        )
+
+        if (!requesterTemplateData) {
+            logger.error('Shift template not found')
+            throw throwCustomError(ErrorDescription.SHIFT_TEMPLATE_NOT_FOUND, StatusCode.NOT_FOUND_404)
+        }
+    }
+
+    if (approverAssignmentData.shiftTemplateId) {
+        approverTemplateData = await repos.shiftTemplateRepo.findById(
+            approverAssignmentData.shiftTemplateId
+        )
+
+        if (!requesterTemplateData) {
+            logger.error('Shift template not found')
+            throw throwCustomError(ErrorDescription.SHIFT_TEMPLATE_NOT_FOUND, StatusCode.NOT_FOUND_404)
+        }
+    }
+    
+
     // หา shift swap ทุกอันที่เกี่ยวกับ assignment นี้
     const allRelateAssignments = await repos.shiftSwapRequestRepo.findByShiftAssignmentId(approverAssignmentData.shiftAssignmentId)
 
     // หา assignment วันที่มาก่อน
     const requesterDate = requesterAssignmentData.date
     const approverDate = approverAssignmentData.date
+
+    const requesterDateFormat = formatDate(
+        requesterDate,
+        'dd-MM-yyyy'
+    )
 
     const approverDateFormat = formatDate(
         approverDate,
@@ -112,8 +145,14 @@ export const updateShiftSwapRequest = async(
         if (requester.lineUserId) {
             await services.lineService.sendMessage(
                 requester.lineUserId,
-                `คำขอแลกเวรของคุณและ ${currentUser.firstName} ${currentUser.lastName} ในวันที่ ${approverDateFormat}\n` + 
-                `ถูกอนุมัติแล้ว ✅`
+                `✅ คำขอแลกเวรถูกอนุมัติแล้ว\n` + 
+                `👤 คุณได้สลับเวรกับ ${currentUser.firstName} ${currentUser.lastName}\n\n` +
+                
+                `🔄 รายละเอียดการสลับ\n\n` +
+                `เวรเดิม: ${requesterDateFormat} (${requesterTemplateData ? requesterTemplateData.type : requesterAssignmentData.assignmentType})\n\n` +
+                `เวรใหม่: ${approverDateFormat} (${approverTemplateData ? approverTemplateData.type : approverAssignmentData.assignmentType})\n\n` +
+
+                `📌 ระบบได้อัปเดตตารางเวรเรียบร้อยแล้ว`
             )
         }
 
@@ -137,11 +176,29 @@ export const updateShiftSwapRequest = async(
                 if (rejectedUser.lineUserId) {
                     await services.lineService.sendMessage(
                         rejectedUser.lineUserId,
-                        `คำขอแลกเวรของคุณและ ${currentUser.firstName} ${currentUser.lastName} ในวันที่ ${approverDateFormat}\n` + 
+                        `คำขอแลกเวรของคุณและ ${currentUser.firstName} ${currentUser.lastName}\n` + 
+                        `ในวันที่ ${approverDateFormat}\n` +
                         `ถูกปฏิเสธอัตโนมัต เนื่องจากเวรถูกอนุมัติไปแล้ว ❌`
                     )
                 }
             }
+        }
+    }
+
+    else if (status === ShiftSwapRequestStatus.REJECTED) {
+        // ส่ง message แจ้งการ approve
+        if (requester.lineUserId) {
+            await services.lineService.sendMessage(
+                requester.lineUserId,
+                `❌ คำขอแลกเวรถูกปฏิเสธ\n` + 
+                `👤 ผู้พิจารณา: ${currentUser.firstName} ${currentUser.lastName}\n\n` +
+                
+                `🔄 รายละเอียดคำขอ\n\n` +
+                `เวรเดิม: ${requesterDateFormat} (${requesterTemplateData ? requesterTemplateData.type : requesterAssignmentData.assignmentType})\n\n` +
+                `เวรที่ขอแลก: ${approverDateFormat} (${approverTemplateData ? approverTemplateData.type : approverAssignmentData.assignmentType})\n\n` +
+
+                `📌 ตารางเวรของคุณยังคงเดิม`
+            )
         }
     }
 

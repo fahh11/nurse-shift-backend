@@ -18,6 +18,7 @@ import { validateUserAssignmentCoverage } from '@service/helpers/validateUserAss
 import { validateEmergencyAssignment } from '@service/helpers/validateEmergencyAssignment'
 import { validateRequiredAssignment } from '@service/helpers/validateRequiredAssignment'
 import { calculateDurationHours } from '@service/helpers/calculateDurationHours'
+import { validateEmergencyDailyAssignment } from '@service/helpers/validateEmergencyDailyAssignment'
 
 export const createShiftAssignment = async(
     input: CreateShiftAssignmentBody[],
@@ -107,12 +108,19 @@ export const createShiftAssignment = async(
         })
     }
 
+    const wardMembers = await repos.wardMemberRepo.findByWardId(wardData.wardId)
+
+    const totalWardMembers = wardMembers.length
+
     // ======= Validation =======
     const warning: string[] = []
     validateWorkHourAssignment(virtualMonthAssignments, virtualAllShiftTemplate, logger)
     validateUserAssignmentCoverage(warning, virtualMonthAssignments, month, year)
     validateEmergencyAssignment(warning, virtualMonthAssignments, month, year)
     validateRequiredAssignment(warning, virtualMonthAssignments, virtualAllShiftTemplate, month, year)
+
+    // validate -> หาก assign ครบคนแล้วในวันนั้นๆต้องมี emergency อย่างน้อย 1 คน
+    validateEmergencyDailyAssignment(virtualMonthAssignments, totalWardMembers)
 
     console.log(warning)
 
@@ -168,8 +176,8 @@ export const createShiftAssignment = async(
         }
 
         // validateDailyAssignment -> หากในวันนั้น มีการ leave, off, emergency จะลงอย่างอีนไม่ได้อีก
-        const existingActiveAssignments = await repos.shiftAssignmentRepo.findActiveAssignmentByUserIdAndDate(assignedUserData.userId, normalizeDate)
-        validateDailyAssignment(wardData.wardId, existingActiveAssignments, assignment.assignmentType)
+        const existingActiveAssignmentOfUser = await repos.shiftAssignmentRepo.findActiveAssignmentByUserIdAndDate(normalizeDate, assignedUserData.userId)
+        validateDailyAssignment(wardData.wardId, existingActiveAssignmentOfUser, assignment.assignmentType)
 
         // create shift assignment 
         const newShiftAssignment = new ShiftAssignment({

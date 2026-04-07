@@ -52,7 +52,7 @@ export const ShiftSwapRequestController = {
             status,
             note,
             request.log,
-            {shiftSwapRequestRepo, userRepo, shiftAssignmentRepo},
+            {shiftSwapRequestRepo, userRepo, shiftAssignmentRepo, shiftTemplateRepo},
             {lineService},
         );
         return reply.send(result);

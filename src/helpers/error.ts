@@ -77,6 +77,10 @@ export const ErrorDescription = {
         code: 'EXCEED_MAX_CONTINUOUS_WORK_HOUR',
         message: 'User exceeds 16 continuous working hours',
     },
+    EMERGENCY_REQUIRED_PER_DAY: {
+        code: 'EMERGENCY_REQUIRED_PER_DAY',
+        message: 'Each working day must have at least one emergency assignment',
+    },
 
     // Shift Swap Request Erros
     SHIFT_SWAP_TOO_LATE: {
