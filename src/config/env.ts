@@ -5,7 +5,7 @@ config();
 
 export const env = {
     nodeEnv: envVar.get('NODE_ENV').default('development').asString(),
-    port: envVar.get('PORT').default('3000').asPortNumber(),
+    port: envVar.get('PORT').default('4000').asPortNumber(),
     logger: envVar.get('LOGGER').default('false').asBoolStrict(),
     host: envVar.get('HOST').default('0.0.0.0').asString(),
 
@@ -16,5 +16,18 @@ export const env = {
     google: {
         clientId: envVar.get("GOOGLE_CLIENT_ID").required().asString(),
         clientSecret: envVar.get("GOOGLE_CLIENT_SECRET").required().asString(),
+        redirectUrl: envVar.get("GOOGLE_REDIRECT_URI").required().asString(),
     },
+
+    jwt: {
+        jwtSecret: envVar.get("JWT_SECRET").required().asString(),
+    },
+
+    line: {
+        channelAccessToken: envVar.get("LINE_CHANNEL_ACCESS_TOKEN").required().asString(),
+    },
+
+    frontEnd: {
+        redirectUrl: envVar.get("FRONTEND_REDIRECT_URL").required().asString(),
+    }
 };

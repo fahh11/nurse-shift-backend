@@ -1,37 +1,39 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
   schemas  = ["nurse_shift_db"]
 }
 
 // ---------- models ----------
 model user {
-  user_id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  first_name      String            @db.VarChar(100)
-  last_name       String            @db.VarChar(100)
-  nickname        String?           @db.VarChar(100)
-  birth_date      DateTime?         @db.Date
-  personal_email  String            @unique @db.VarChar(255)
-  google_email_id String            @unique @db.VarChar(255)
-  line_user_id    String            @unique @db.VarChar(255)
-  mobile_phone    String            @db.VarChar(25)
-  hospital_id     String            @db.Uuid
-  created_at      DateTime          @default(now()) @db.Timestamp(6)
-  updated_at      DateTime          @updatedAt @db.Timestamp(6)
+  user_id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  first_name              String?           @db.VarChar(100)
+  last_name               String?           @db.VarChar(100)
+  personal_email          String            @unique @db.VarChar(255)
+  google_email_id         String            @unique @db.VarChar(255)
+  line_user_id            String?           @unique @db.VarChar(255)
+  line_link_token         String?           @unique @db.Uuid
+  line_link_token_expire  DateTime?
+  hospital_id             String?           @db.Uuid
+  profile_completed       Boolean           @default(false)
+  created_at              DateTime          @default(now()) @db.Timestamp(6)
+  updated_at              DateTime          @updatedAt @db.Timestamp(6)
 
   // Relations
-  wardCreatedBy         ward[]                @relation("wardCreatedBy")
-  wardUpdatedBy         ward[]                @relation("wardUpdatedBy")
-  wardMember            ward_member[]
-  shiftAssignments      shift_assignment[]
-  shiftSwapRequesters   shift_swap_request[]  @relation("shiftSwapRequesters")
-  shiftSwapApprovers    shift_swap_request[]  @relation("shiftSwapApprovers")
+  wardCreatedBy             ward[]                @relation("wardCreatedBy")
+  wardUpdatedBy             ward[]                @relation("wardUpdatedBy")
+  wardMember                ward_member[]
+  shiftAssignments          shift_assignment[]
+  shiftAssignmentCreatedBy  shift_assignment[]    @relation("shiftAssignmentCreatedBy")
+  shiftAssignmentUpdatedBy  shift_assignment[]    @relation("shiftAssignmentUpdatedBy")
+  shiftSwapRequesters       shift_swap_request[]  @relation("shiftSwapRequesters")
+  shiftSwapApprovers        shift_swap_request[]  @relation("shiftSwapApprovers")
 
-  hospital        hospital          @relation(fields: [hospital_id], references: [hospital_id])
+  hospital        hospital?          @relation(fields: [hospital_id], references: [hospital_id])
 
   @@schema("nurse_shift_db")
 }
@@ -52,7 +54,6 @@ model hospital {
 
 model ward {
   ward_id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  ward_code           String            @db.VarChar(255)
   ward_name           String            @db.VarChar(255)
   hospital_id         String            @db.Uuid
   join_code           String            @unique @db.VarChar(255)
@@ -66,6 +67,7 @@ model ward {
   // Relations
   wardMembers         ward_member[]
   shiftTemplates      shift_template[]
+  shiftAssignments    shift_assignment[]
 
   createdBy           user              @relation("wardCreatedBy", fields: [created_by], references: [user_id])
   updatedBy           user              @relation("wardUpdatedBy", fields: [updated_by], references: [user_id])
@@ -80,7 +82,8 @@ model ward_member {
   ward_id                    String            @db.Uuid
   role                       WardMemberRole
   created_at                 DateTime          @default(now()) @db.Timestamp(6)
-  updated_at                 DateTime          @updatedAt @db.Timestamp(6)
+
+  @@unique([user_id, ward_id])
 
   // Relations
   user                      user              @relation(fields: [user_id], references: [user_id])
@@ -93,8 +96,8 @@ model shift_template {
   shift_template_id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   ward_id                    String            @db.Uuid
   type                       ShiftTemplateType
-  start_time                 DateTime          @db.Time
-  end_time                   DateTime          @db.Time
+  start_time                 String            @db.VarChar(5)
+  end_time                   String            @db.VarChar(5)
   created_at                 DateTime          @default(now()) @db.Timestamp(6)
   updated_at                 DateTime          @updatedAt @db.Timestamp(6)
 
@@ -116,8 +119,6 @@ model shift_requirement {
   created_at                  DateTime          @default(now()) @db.Timestamp(6)
   updated_at                  DateTime          @updatedAt @db.Timestamp(6)
 
-  @@unique([shift_template_id, effective_from])
-
   // Relations
   shiftTemplate              shift_template    @relation(fields: [shift_template_id], references: [shift_template_id])
 
@@ -126,21 +127,26 @@ model shift_requirement {
 
 model shift_assignment {
   shift_assignment_id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  shift_template_id           String            @db.Uuid
+  shift_template_id           String?           @db.Uuid
+  ward_id                     String            @db.Uuid
   user_id                     String            @db.Uuid
   date                        DateTime          @db.Date
   assignment_type             ShiftAssignmentType
+  created_by                  String            @db.Uuid
+  updated_by                  String            @db.Uuid
   created_at                  DateTime          @default(now()) @db.Timestamp(6)
   updated_at                  DateTime          @updatedAt @db.Timestamp(6)
-
-  @@unique([user_id, date])
+  deleted_at                  DateTime?         @db.Timestamp(6)
 
   // Relations
   shiftAssignmentOfRequesters   shift_swap_request[]  @relation("shiftAssignOfRequesters")
   shiftAssignmentOfApprovers    shift_swap_request[]  @relation("shiftAssignOfApprovers")
 
-  shiftTemplate                 shift_template        @relation(fields: [shift_template_id], references: [shift_template_id])
-  user                          user                  @relation(fields: [user_id], references: [user_id])
+  shiftTemplate                 shift_template?        @relation(fields: [shift_template_id], references: [shift_template_id])
+  ward                          ward                   @relation(fields: [ward_id], references: [ward_id])
+  user                          user                   @relation(fields: [user_id], references: [user_id])
+  createdBy                     user                   @relation("shiftAssignmentCreatedBy", fields: [created_by], references: [user_id])
+  updatedBy                     user                   @relation("shiftAssignmentUpdatedBy", fields: [updated_by], references: [user_id])
 
   @@schema("nurse_shift_db")
 }
@@ -152,7 +158,7 @@ model shift_swap_request {
   requester_assignment_id       String            @db.Uuid
   approver_assignment_id        String            @db.Uuid
   status                        ShiftSwapRequestStatus
-  note                          String            @db.VarChar(255)
+  note                          String?           @db.VarChar(255)
   requested_at                  DateTime          @default(now()) @db.Timestamp(6)
   responded_at                  DateTime?         @updatedAt @db.Timestamp(6)
 
@@ -191,6 +197,7 @@ enum ShiftTemplateType {
 
 enum ShiftAssignmentType {
   shift
+  emergency
   off
   leave
 
